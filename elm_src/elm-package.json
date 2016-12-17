@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "proof of concept static site",
-    "repository": "https://github.com/fxmy/fxmy.github.io.git",
+    "repository": "https://github.com/fxmy/fxmygithubio.git",
     "license": "BSD3",
     "source-directories": [
         "."
