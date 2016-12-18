@@ -42,7 +42,8 @@ view : Model -> Html Msg
 view model =
   Material.Scheme.topWithScheme Color.Teal Color.Pink <|
     Layout.render Mdl model.mdl
-    [ Layout.waterfall True,
+    [ Layout.fixedHeader,
+      Layout.waterfall True,
       Layout.onSelectTab SelectTab,
       Layout.selectedTab model.tab_selected]
     { header = [ h1[ style[( "padding", "1rem")]] [ text model.header_content]],

@@ -15067,14 +15067,18 @@ var _fxmy$fxmygithubio$BlogFxmy_Main$view = function (model) {
 			model.mdl,
 			{
 				ctor: '::',
-				_0: _MichaelCombs28$elm_mdl$Material_Layout$waterfall(true),
+				_0: _MichaelCombs28$elm_mdl$Material_Layout$fixedHeader,
 				_1: {
 					ctor: '::',
-					_0: _MichaelCombs28$elm_mdl$Material_Layout$onSelectTab(_fxmy$fxmygithubio$BlogFxmy_Main$SelectTab),
+					_0: _MichaelCombs28$elm_mdl$Material_Layout$waterfall(true),
 					_1: {
 						ctor: '::',
-						_0: _MichaelCombs28$elm_mdl$Material_Layout$selectedTab(model.tab_selected),
-						_1: {ctor: '[]'}
+						_0: _MichaelCombs28$elm_mdl$Material_Layout$onSelectTab(_fxmy$fxmygithubio$BlogFxmy_Main$SelectTab),
+						_1: {
+							ctor: '::',
+							_0: _MichaelCombs28$elm_mdl$Material_Layout$selectedTab(model.tab_selected),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			},
