@@ -47,7 +47,6 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div [] [
-    h1 [] [ text model.content_url],
     Markdown.toHtml [ style[ ("margin", "0 24px")]] model.content
     ]
 
