@@ -15460,30 +15460,19 @@ var _fxmy$fxmygithubio$FxmyBody$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h1,
-				{ctor: '[]'},
+				_evancz$elm_markdown$Markdown$toHtml,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(model.content_url),
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 24px'},
+							_1: {ctor: '[]'}
+						}),
 					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_evancz$elm_markdown$Markdown$toHtml,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$style(
-							{
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 24px'},
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					},
-					model.content),
-				_1: {ctor: '[]'}
-			}
+				},
+				model.content),
+			_1: {ctor: '[]'}
 		});
 };
 var _fxmy$fxmygithubio$FxmyBody$render = F2(
