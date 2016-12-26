@@ -1,4 +1,4 @@
-module BlogFxmy.Main exposing (..)
+module FxmyHeader exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
@@ -8,33 +8,31 @@ import Material.Button as Button
 import Material.Layout as Layout
 import Material.Color as Color
 
+import FxmyBody as Body
+
 
 -- MODEL
 type alias Model = {
   header_content : String,
   mdl : Material.Model,
-  tab_selected : Int
+  tab_selected : Int,
+  body : Body.Model
   }
 
-model : Model
-model = {
+initModel : Model
+initModel = {
   header_content = "No Gods or Kings, only Man.",
   mdl = Material.model,
-  tab_selected = 0
+  tab_selected = 0,
+  body = Body.initModel
   }
-
-
--- INIT
-init : ( Model, Cmd Msg )
-init =
-    ( model, Cmd.none )
 
 
 -- MESSAGES
 type Msg =
   Mdl ( Material.Msg Msg)
     | SelectTab Int
-    | NoOp
+    | BodyMsg Body.Msg
 
 
 -- VIEW
@@ -66,25 +64,29 @@ view_main model =
 -- VIEWBLOG
 view_blog : Model -> Html Msg
 view_blog model =
-  h3 [ style[ ("margin", "0 24px")]] [ text "此乃蒹葭 (〃∀〃)"]
-
+  Body.render BodyMsg model.body
+--h3 [ style[ ("margin", "0 24px")]] [ text "此乃蒹葭 (〃∀〃)"]
 
 -- VIEWABOUT
 view_about : Model -> Html Msg
 view_about model =
   h2 [ style[ ("margin", "0 24px")]] [ text "fxmywc@gmail.com (`ε´ )"]
 
+
 -- UPDATE
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
-    NoOp ->
-      ( model, Cmd.none )
     SelectTab num ->
       { model | tab_selected = num} ! []
     Mdl msg_mdl ->
       Material.update msg_mdl model
-
+    BodyMsg msg_body ->
+      let
+          ( newBodyModel, bodyCmd) =
+            Body.update msg_body model.body
+      in
+          { model | body = newBodyModel} ! [ Cmd.map BodyMsg bodyCmd]
 
 -- SUBSCRIPTIONS
 subscriptions : Model -> Sub Msg
@@ -96,7 +98,10 @@ subscriptions model =
 main : Program Never Model Msg
 main =
   program {
-    init = init,
+    init = (
+        initModel,
+            Cmd.map BodyMsg ( Body.get_content initModel.body.content_url)
+        ),
     view = view,
     update = update,
     subscriptions = subscriptions
