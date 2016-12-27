@@ -8,6 +8,9 @@ import Material.Button as Button
 import Material.Layout as Layout
 import Material.Color as Color
 
+import Navigation
+import RouteUrl as Routing
+
 import FxmyBody as Body
 
 
@@ -100,7 +103,7 @@ main =
   program {
     init = (
         initModel,
-            Cmd.map BodyMsg ( Body.get_content initModel.body.content_url)
+            Cmd.map BodyMsg ( Body.get_content initModel.body)
         ),
     view = view,
     update = update,

@@ -40,7 +40,10 @@ update msg model =
     BlogContent ( Err why) ->
       { model | content = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []
     LoadURLContent url ->
-      { model | content_url = url} ! [ get_content url]
+      let
+          modelNew = { model | content_url = url}
+      in
+          modelNew ! [ get_content modelNew]
 
 
 -- VIEW
@@ -59,10 +62,10 @@ render tag model =
 
 
 -- GET_CONTENT
-get_content : String -> Cmd Msg
-get_content url =
+get_content : Model -> Cmd Msg
+get_content model =
   let
-      url_full = "https://fxmy.github.io" ++ url
+      url_full = "https://fxmy.github.io" ++ model.content_url
       request = Http.getString url_full
   in
       Http.send BlogContent request
