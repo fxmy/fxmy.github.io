@@ -1,1 +1,1 @@
-[post test](/#_posts/test)
+[post test](#_posts/test)
