@@ -15964,6 +15964,15 @@ var _evancz$elm_markdown$Markdown$Options = F4(
 	function (a, b, c, d) {
 		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
 	});
+var _fxmy$fxmygithubio$FxmyBody$set_content_url = F2(
+	function (model, url) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{content_url: url});
+	});
+var _fxmy$fxmygithubio$FxmyBody$get_content_url = function (model) {
+	return model.content_url;
+};
 var _fxmy$fxmygithubio$FxmyBody$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -15971,23 +15980,34 @@ var _fxmy$fxmygithubio$FxmyBody$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_evancz$elm_markdown$Markdown$toHtml,
+				_elm_lang$html$Html$h2,
+				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 48px'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'padding', _1: '12px'},
-								_1: {ctor: '[]'}
-							}
-						}),
+					_0: _elm_lang$html$Html$text(model.content_url),
 					_1: {ctor: '[]'}
-				},
-				model.content),
-			_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_evancz$elm_markdown$Markdown$toHtml,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 48px'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'padding', _1: '12px'},
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					model.content),
+				_1: {ctor: '[]'}
+			}
 		});
 };
 var _fxmy$fxmygithubio$FxmyBody$render = F2(
@@ -15997,7 +16017,7 @@ var _fxmy$fxmygithubio$FxmyBody$render = F2(
 			tag,
 			_fxmy$fxmygithubio$FxmyBody$view(model));
 	});
-var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '/post_index.md', content: '\n  '};
+var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '', content: '\n  '};
 var _fxmy$fxmygithubio$FxmyBody$Model = F2(
 	function (a, b) {
 		return {content_url: a, content: b};
@@ -16006,7 +16026,7 @@ var _fxmy$fxmygithubio$FxmyBody$BlogContent = function (a) {
 	return {ctor: 'BlogContent', _0: a};
 };
 var _fxmy$fxmygithubio$FxmyBody$get_content = function (model) {
-	var url_full = A2(_elm_lang$core$Basics_ops['++'], 'https://fxmy.github.io', model.content_url);
+	var url_full = A2(_elm_lang$core$Basics_ops['++'], 'https://fxmy.github.io/', model.content_url);
 	var request = _elm_lang$http$Http$getString(url_full);
 	return A2(_elm_lang$http$Http$send, _fxmy$fxmygithubio$FxmyBody$BlogContent, request);
 };
@@ -16789,6 +16809,37 @@ var _rgrempel$elm_route_url$RouteUrl$programWithFlags = function (_p23) {
 	return _rgrempel$elm_route_url$RouteUrl$runNavigationAppWithFlags(
 		_rgrempel$elm_route_url$RouteUrl$navigationAppWithFlags(_p23));
 };
+var _fxmy$fxmygithubio$FxmyHeader$delta2url = F2(
+	function (modelOld, modelNew) {
+		if (!_elm_lang$core$Native_Utils.eq(modelOld.tab_selected, modelNew.tab_selected)) {
+			var urlNew = function () {
+				var _p0 = modelNew.tab_selected;
+				switch (_p0) {
+					case 0:
+						return '#blog';
+					case 1:
+						return '#about';
+					default:
+						return 'https://www.destroyallsoftware.com/talks/wat';
+				}
+			}();
+			return _elm_lang$core$Maybe$Just(
+				{entry: _rgrempel$elm_route_url$RouteUrl$NewEntry, url: urlNew});
+		} else {
+			if (_elm_lang$core$Native_Utils.eq(modelNew.tab_selected, 0) && (!_elm_lang$core$Native_Utils.eq(
+				_fxmy$fxmygithubio$FxmyBody$get_content_url(modelOld.body),
+				_fxmy$fxmygithubio$FxmyBody$get_content_url(modelNew.body)))) {
+				var urlNew = A2(
+					_elm_lang$core$Basics_ops['++'],
+					'#',
+					_fxmy$fxmygithubio$FxmyBody$get_content_url(modelNew.body));
+				return _elm_lang$core$Maybe$Just(
+					{entry: _rgrempel$elm_route_url$RouteUrl$NewEntry, url: urlNew});
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}
+	});
 var _fxmy$fxmygithubio$FxmyHeader$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -16816,6 +16867,9 @@ var _fxmy$fxmygithubio$FxmyHeader$Model = F4(
 	function (a, b, c, d) {
 		return {header_content: a, mdl: b, tab_selected: c, body: d};
 	});
+var _fxmy$fxmygithubio$FxmyHeader$DisplayTab = function (a) {
+	return {ctor: 'DisplayTab', _0: a};
+};
 var _fxmy$fxmygithubio$FxmyHeader$BodyMsg = function (a) {
 	return {ctor: 'BodyMsg', _0: a};
 };
@@ -16823,8 +16877,8 @@ var _fxmy$fxmygithubio$FxmyHeader$view_blog = function (model) {
 	return A2(_fxmy$fxmygithubio$FxmyBody$render, _fxmy$fxmygithubio$FxmyHeader$BodyMsg, model.body);
 };
 var _fxmy$fxmygithubio$FxmyHeader$view_main = function (model) {
-	var _p0 = model.tab_selected;
-	switch (_p0) {
+	var _p1 = model.tab_selected;
+	switch (_p1) {
 		case 0:
 			return _fxmy$fxmygithubio$FxmyHeader$view_blog(model);
 		case 1:
@@ -16851,21 +16905,45 @@ var _fxmy$fxmygithubio$FxmyHeader$view_main = function (model) {
 };
 var _fxmy$fxmygithubio$FxmyHeader$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
 			case 'SelectTab':
+				if (_p2._0 === 0) {
+					var bodyNew = A2(_fxmy$fxmygithubio$FxmyBody$set_content_url, model.body, 'blog');
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{tab_selected: 0, body: bodyNew}),
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Platform_Cmd$map,
+								_fxmy$fxmygithubio$FxmyHeader$BodyMsg,
+								_fxmy$fxmygithubio$FxmyBody$get_content(bodyNew)),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{tab_selected: _p2._0}),
+						{ctor: '[]'});
+				}
+			case 'DisplayTab':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{tab_selected: _p1._0}),
+						{tab_selected: _p2._0}),
 					{ctor: '[]'});
 			case 'Mdl':
-				return A2(_MichaelCombs28$elm_mdl$Material$update, _p1._0, model);
+				return A2(_MichaelCombs28$elm_mdl$Material$update, _p2._0, model);
 			default:
-				var _p2 = A2(_fxmy$fxmygithubio$FxmyBody$update, _p1._0, model.body);
-				var newBodyModel = _p2._0;
-				var bodyCmd = _p2._1;
+				var _p3 = A2(_fxmy$fxmygithubio$FxmyBody$update, _p2._0, model.body);
+				var newBodyModel = _p3._0;
+				var bodyCmd = _p3._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -16880,6 +16958,39 @@ var _fxmy$fxmygithubio$FxmyHeader$update = F2(
 	});
 var _fxmy$fxmygithubio$FxmyHeader$SelectTab = function (a) {
 	return {ctor: 'SelectTab', _0: a};
+};
+var _fxmy$fxmygithubio$FxmyHeader$location2messages = function (location) {
+	var _p4 = A2(_elm_lang$core$String$dropLeft, 1, location.hash);
+	switch (_p4) {
+		case '':
+			return {
+				ctor: '::',
+				_0: _fxmy$fxmygithubio$FxmyHeader$SelectTab(0),
+				_1: {
+					ctor: '::',
+					_0: _fxmy$fxmygithubio$FxmyHeader$BodyMsg(
+						_fxmy$fxmygithubio$FxmyBody$LoadURLContent('blog')),
+					_1: {ctor: '[]'}
+				}
+			};
+		case 'about':
+			return {
+				ctor: '::',
+				_0: _fxmy$fxmygithubio$FxmyHeader$SelectTab(1),
+				_1: {ctor: '[]'}
+			};
+		default:
+			return {
+				ctor: '::',
+				_0: _fxmy$fxmygithubio$FxmyHeader$BodyMsg(
+					_fxmy$fxmygithubio$FxmyBody$LoadURLContent(_p4)),
+				_1: {
+					ctor: '::',
+					_0: _fxmy$fxmygithubio$FxmyHeader$DisplayTab(0),
+					_1: {ctor: '[]'}
+				}
+			};
+	}
 };
 var _fxmy$fxmygithubio$FxmyHeader$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
@@ -16958,16 +17069,11 @@ var _fxmy$fxmygithubio$FxmyHeader$view = function (model) {
 				}
 			}));
 };
-var _fxmy$fxmygithubio$FxmyHeader$main = _elm_lang$html$Html$program(
+var _fxmy$fxmygithubio$FxmyHeader$main = _rgrempel$elm_route_url$RouteUrl$program(
 	{
-		init: {
-			ctor: '_Tuple2',
-			_0: _fxmy$fxmygithubio$FxmyHeader$initModel,
-			_1: A2(
-				_elm_lang$core$Platform_Cmd$map,
-				_fxmy$fxmygithubio$FxmyHeader$BodyMsg,
-				_fxmy$fxmygithubio$FxmyBody$get_content(_fxmy$fxmygithubio$FxmyHeader$initModel.body))
-		},
+		delta2url: _fxmy$fxmygithubio$FxmyHeader$delta2url,
+		location2messages: _fxmy$fxmygithubio$FxmyHeader$location2messages,
+		init: {ctor: '_Tuple2', _0: _fxmy$fxmygithubio$FxmyHeader$initModel, _1: _elm_lang$core$Platform_Cmd$none},
 		view: _fxmy$fxmygithubio$FxmyHeader$view,
 		update: _fxmy$fxmygithubio$FxmyHeader$update,
 		subscriptions: _fxmy$fxmygithubio$FxmyHeader$subscriptions

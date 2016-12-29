@@ -146,11 +146,10 @@ location2messages location =
 -- MAIN
 main : Routing.RouteUrlProgram Never Model Msg
 main =
-  program {
-    init = (
-        initModel,
-            Cmd.map BodyMsg ( Body.get_content initModel.body)
-        ),
+  Routing.program {
+    delta2url = delta2url,
+    location2messages = location2messages,
+    init = ( initModel, Cmd.none),
     view = view,
     update = update,
     subscriptions = subscriptions

@@ -1,3 +1,4 @@
+.PHONY: blog clean
 blog :
 	cd elm_src; \
 	  echo ${CURDIR}; \
