@@ -19,7 +19,7 @@ initModel = {
   blog_index | md_blog_entry | rich_js_entry
   respectively
   --}
-  content_url = "/post_index.md",
+  content_url = "",
   content = """
   """
   }
@@ -49,7 +49,7 @@ update msg model =
 -- VIEW
 view : Model -> Html Msg
 view model =
-  div [] [
+  div [] [ h2 [][ text model.content_url],
     Markdown.toHtml [ style[ ("margin", "0 48px"), ("padding", "12px")]]
       model.content
     ]
@@ -65,7 +65,17 @@ render tag model =
 get_content : Model -> Cmd Msg
 get_content model =
   let
-      url_full = "https://fxmy.github.io" ++ model.content_url
+      url_full = "https://fxmy.github.io/" ++ model.content_url
       request = Http.getString url_full
   in
       Http.send BlogContent request
+
+
+-- MISC
+get_content_url : Model -> String
+get_content_url model =
+  model.content_url
+
+set_content_url : Model -> String -> Model
+set_content_url model url =
+  { model | content_url = url}
