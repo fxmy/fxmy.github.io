@@ -1,8 +1,11 @@
 Elm_NSSS(not so static site): 不辣么静态的静态站点(　ﾟ 3ﾟ)
 ==========================
 最近突然想把博客收拾起来，之前跑在[heroku](http://fxmy.herokuapp.com/)上的用着实在是不方便。
+
 正好这一阵子在玩Elm，于是打算用Elm在github上撸一个纯静态站点，像jekyll那样用md写博客的东西。
+
 然而又转念一想，既然用了Elm那么为什么不搞得牛逼一点呢？于是就花了点时间撸出来了这么个玩意。
+
 第一次拿Elm搞事还是有点跌跌撞撞的，代码还需要进一步打磨。
 
 ----------------------
@@ -11,7 +14,7 @@ Elm_NSSS(not so static site): 不辣么静态的静态站点(　ﾟ 3ﾟ)
 - 纯Elm实现，妈妈在也不用担心我被js恶心吐辣。
 - 感谢[Elm-mdl](https://github.com/debois/elm-mdl)的帮助，Material design看着就是舒服。
 - SPA，绿色低碳，而且在GitHub Pages上撸出个SPA还是有点爽的。
-- 滋兹md渲染，异步xhr渲染md什么的hin爽。
+- 滋兹md写博客，异步xhr渲染md什么的hin爽。
 
 ----------------------
 当然还要进行微调样式，目前看着还很简陋(*ﾟーﾟ)。
