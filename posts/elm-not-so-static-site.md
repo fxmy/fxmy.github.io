@@ -9,7 +9,7 @@ Elm_NSSS(not so static site): 不辣么静态的静态站点(　ﾟ 3ﾟ)
 第一次拿Elm搞事还是有点跌跌撞撞的，代码还需要进一步打磨。
 
 ----------------------
-特点：
+###特点：
 
 - 纯Elm实现，妈妈在也不用担心我被js恶心吐辣。
 - 感谢[Elm-mdl](https://github.com/debois/elm-mdl)的帮助，Material design看着就是舒服。
@@ -21,7 +21,7 @@ Elm_NSSS(not so static site): 不辣么静态的静态站点(　ﾟ 3ﾟ)
 而且还需要手动更新blog index，比较不爽。
 
 ----------------------
-TODO:
+###TODO:
 
 - 评论框
 - 代码高亮
