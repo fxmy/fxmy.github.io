@@ -36,6 +36,10 @@ type Msg =
   Mdl ( Material.Msg Msg)
     | SelectTab Int
     | BodyMsg Body.Msg
+    | DisplayTab Int
+{-- DispalyTab is side effect free, while
+    SelectTab fires xhr http request via Cmd
+--}
 
 
 -- VIEW
@@ -68,7 +72,7 @@ view_main model =
 view_blog : Model -> Html Msg
 view_blog model =
   Body.render BodyMsg model.body
---h3 [ style[ ("margin", "0 24px")]] [ text "此乃蒹葭 (〃∀〃)"]
+
 
 -- VIEWABOUT
 view_about : Model -> Html Msg
@@ -80,7 +84,15 @@ view_about model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
+    SelectTab 0 ->
+      let
+          bodyNew = Body.set_content_url model.body "blog"
+      in
+          { model | tab_selected = 0, body = bodyNew}
+          ! [ Cmd.map BodyMsg (Body.get_content bodyNew)]
     SelectTab num ->
+      { model | tab_selected = num} ! []
+    DisplayTab num ->
       { model | tab_selected = num} ! []
     Mdl msg_mdl ->
       Material.update msg_mdl model
@@ -97,8 +109,42 @@ subscriptions model =
   Sub.none
 
 
+-- ROUTING
+delta2url : Model -> Model -> Maybe Routing.UrlChange
+delta2url modelOld modelNew =
+  if modelOld.tab_selected /= modelNew.tab_selected then
+    let
+        urlNew =
+          case modelNew.tab_selected of
+            0 ->
+              "#blog"-- ++ Body.get_content_url modelNew.body
+            1 ->
+              "#about"
+            _ ->
+              "https://www.destroyallsoftware.com/talks/wat"
+    in
+        Just { entry = Routing.NewEntry, url = urlNew}
+  else if modelNew.tab_selected == 0 && Body.get_content_url modelOld.body /= Body.get_content_url modelNew.body then
+    let
+        urlNew = "#" ++ Body.get_content_url modelNew.body
+    in
+        Just { entry = Routing.NewEntry, url = urlNew}
+  else
+    Nothing
+
+location2messages : Navigation.Location -> List Msg
+location2messages location =
+  case String.dropLeft 1 location.hash of
+    "" ->
+      [ SelectTab 0, BodyMsg (Body.LoadURLContent "blog")]
+    "about" ->
+      [ SelectTab 1]
+    str ->
+      [ BodyMsg (Body.LoadURLContent str), DisplayTab 0]
+
+
 -- MAIN
-main : Program Never Model Msg
+main : Routing.RouteUrlProgram Never Model Msg
 main =
   program {
     init = (
