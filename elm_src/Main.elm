@@ -7,6 +7,7 @@ import Material.Scheme
 import Material.Button as Button
 import Material.Layout as Layout
 import Material.Color as Color
+import Material.Options as Options exposing (css)
 
 import Navigation
 import RouteUrl as Routing
@@ -51,7 +52,16 @@ view model =
       Layout.waterfall True,
       Layout.onSelectTab SelectTab,
       Layout.selectedTab model.tab_selected]
-    { header = [ h1[ style[( "padding", "1rem")]] [ text model.header_content]],
+    { header = [ Layout.row[ css "height" "152px", css "transition" "height 333ms ease-in-out 500ms"]
+                           [ h1[ style[( "padding", "1rem")]]
+                               [ text model.header_content],
+                             Layout.spacer,
+                             Layout.navigation[]
+                                              [ Layout.link[ Layout.href "https://fxmy.github.io/rss.xml"]
+                                                           [ h5[][text "RSS"]]
+                                              ]
+                            ]
+                ],
       drawer = [],
       tabs = ( [ text "Blog", text "About"], [ Color.background ( Color.color Color.Teal Color.S400)]),
       main = [ view_main model]
