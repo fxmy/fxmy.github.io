@@ -26,7 +26,7 @@ Elm_NSSS(not so static site): 不辣么静态的静态站点(　ﾟ 3ﾟ)
 
 - 评论框
 - 代码高亮
-- RSS feed
+- ~~RSS feed~~
 
 ----------------------
 ﾟ ∀ﾟ)ノ
