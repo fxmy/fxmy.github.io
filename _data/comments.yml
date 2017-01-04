@@ -1,0 +1,8 @@
+/posts/test.md:
+  - author:
+      type: github
+      displayName: fxmy
+      url: 'https://github.com/fxmy'
+      picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
+    content: test
+    date: 2017-01-04T14:49:33.936Z
