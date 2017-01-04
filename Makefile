@@ -5,7 +5,7 @@ all : blog rss
 blog :
 	cd elm_src; \
 	  echo ${CURDIR}; \
-	  elm-make Main.elm --output=../index.html; \
+	  elm-make Main.elm --output=../assets/elm.js; \
 	  elm-make PostSkeleton.elm --output=../post.html
 
 rss :
