@@ -16041,6 +16041,16 @@ var _fxmy$fxmygithubio$FxmyBody$set_content_url = F2(
 var _fxmy$fxmygithubio$FxmyBody$get_content_url = function (model) {
 	return model.content_url;
 };
+var _fxmy$fxmygithubio$FxmyBody$commentit_view = function (model) {
+	return _elm_lang$core$Native_Utils.eq(model.content_url, 'blog') ? _elm_lang$html$Html$text('') : A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$id('commentit'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+};
 var _fxmy$fxmygithubio$FxmyBody$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -16074,7 +16084,11 @@ var _fxmy$fxmygithubio$FxmyBody$view = function (model) {
 						_1: {ctor: '[]'}
 					},
 					model.content),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _fxmy$fxmygithubio$FxmyBody$commentit_view(model),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -16086,6 +16100,14 @@ var _fxmy$fxmygithubio$FxmyBody$render = F2(
 			_fxmy$fxmygithubio$FxmyBody$view(model));
 	});
 var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '', content: '\n  '};
+var _fxmy$fxmygithubio$FxmyBody$commentit = _elm_lang$core$Native_Platform.outgoingPort(
+	'commentit',
+	function (v) {
+		return v;
+	});
+var _fxmy$fxmygithubio$FxmyBody$commentit_cmd = function (model) {
+	return _elm_lang$core$Native_Utils.eq(model.content_url, 'blog') ? _elm_lang$core$Platform_Cmd$none : _fxmy$fxmygithubio$FxmyBody$commentit(model.content_url);
+};
 var _fxmy$fxmygithubio$FxmyBody$Model = F2(
 	function (a, b) {
 		return {content_url: a, content: b};
@@ -16132,7 +16154,11 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 				{
 					ctor: '::',
 					_0: _fxmy$fxmygithubio$FxmyBody$get_content(modelNew),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _fxmy$fxmygithubio$FxmyBody$commentit_cmd(modelNew),
+						_1: {ctor: '[]'}
+					}
 				});
 		}
 	});

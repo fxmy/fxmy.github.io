@@ -1,8 +1,8 @@
-module FxmyBody exposing (..)
+port module FxmyBody exposing (..)
 
 import Http
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (style, id)
 import Markdown
 
 
@@ -31,6 +31,9 @@ type Msg =
     | BlogContent ( Result Http.Error String)
 
 
+port commentit : String -> Cmd msg
+
+
 -- UPDATE
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
@@ -43,15 +46,16 @@ update msg model =
       let
           modelNew = { model | content_url = url}
       in
-          modelNew ! [ get_content modelNew]
+          modelNew ! [ get_content modelNew, commentit_cmd modelNew]
 
 
 -- VIEW
 view : Model -> Html Msg
 view model =
-  div [] [ h3 [][ text model.content_url],
-    Markdown.toHtml [ style[ ("margin", "0 48px"), ("padding", "12px")]]
-      model.content
+  div [] [
+    h3 [][ text model.content_url],
+    Markdown.toHtml [ style[ ("margin", "0 48px"), ("padding", "12px")]] model.content,
+    commentit_view model
     ]
 
 
@@ -69,6 +73,24 @@ get_content model =
       request = Http.getString url_full
   in
       Http.send BlogContent request
+
+
+-- SHOW_COMMENTIT
+commentit_cmd : Model -> Cmd Msg
+commentit_cmd model =
+  if model.content_url == "blog" then
+    Cmd.none
+  else
+    commentit model.content_url
+
+
+-- COMMENTIT_VIEW
+commentit_view : Model -> Html Msg
+commentit_view model =
+  if model.content_url == "blog" then
+    text ""
+  else
+    div [ id "commentit"] []
 
 
 -- MISC

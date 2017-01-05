@@ -49,17 +49,28 @@
 
     <!-- commentit.io -->
     <noscript>Please enable JavaScript to view the comment form powered by <a href="https://commentit.io/">Comm(ent|it)</a></noscript>
-    <div id="commentit"></div>
     <script type="text/javascript">
-      var commentitUsername = 'fxmy';
+      app.ports.commentit_cmd.subscribe(function(commId){
+        commentitUsername = 'fxmy';
+        commentitRepo = 'fxmy/fxmy.github.io';
+        commentitId = commId;
+        console.log('=========================');
+        console.log(commentitId);
+        var commentit = document.createElement('script');
+        commentit.type = 'text/javascript';
+        commentit.async = true;
+        commentit.src = 'https://commentit.io/static/embed/dist/commentit.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(commentit);
+      });
+
+      /** var commentitUsername = 'fxmy';
       var commentitRepo = 'fxmy/fxmy.github.io';
-      var commentitId = '/posts/test.md';
       (function() {
         var commentit = document.createElement('script');
         commentit.type = 'text/javascript';
         commentit.async = true;
         commentit.src = 'https://commentit.io/static/embed/dist/commentit.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(commentit);
-      })();
+      })(); **/
     </script>
-      </body>
+  </body>
