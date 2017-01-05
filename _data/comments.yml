@@ -6,3 +6,13 @@
       picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
     content: test
     date: 2017-01-04T14:49:33.936Z
+posts/elm-not-so-static-site.md:
+  - author:
+      type: github
+      displayName: fxmy
+      url: 'https://github.com/fxmy'
+      picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
+    content: >-
+      &#x6765;&#x81EA;Elm ports&#x7684;&#x8BC4;&#x8BBA;&#xFF9F;
+      &forall;&#xFF9F;)&#x30CE;
+    date: 2017-01-05T08:44:30.121Z
