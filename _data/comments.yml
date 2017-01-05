@@ -30,3 +30,10 @@ posts/elm-not-so-static-site.md:
       picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
     content: 3rd
     date: 2017-01-05T08:57:30.280Z
+  - author:
+      type: github
+      displayName: fxmy
+      url: 'https://github.com/fxmy'
+      picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
+    content: '4th _(:3JZ)_'
+    date: 2017-01-05T08:58:10.860Z
