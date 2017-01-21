@@ -51,10 +51,22 @@
     <noscript>Please enable JavaScript to view the comment form powered by <a href="https://commentit.io/">Comm(ent|it)</a></noscript>
     <script type="text/javascript">
       app.ports.commentit.subscribe(function(commId){
+        var old = document.getElementById('commentit');
+        if( old == undefined) {
+          console.log('++++++++++++++++++');
+        } else {
+          console.log('******************');
+          if(old.childNodes[0] != undefined) {
+            console.log('&&&&&&&&&&&&&&&&&&&');
+            while (old.hasChildNodes()) {
+              old.removeChild(old.lastChild);
+            }
+          }
+        }
         commentitUsername = 'fxmy';
         commentitRepo = 'fxmy/fxmy.github.io';
         commentitId = commId;
-        console.log('=========================');
+        console.log('=========================!!!!!!');
         console.log(commentitId);
         var commentit = document.createElement('script');
         commentit.type = 'text/javascript';
