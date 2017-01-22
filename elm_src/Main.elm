@@ -146,7 +146,7 @@ location2messages : Navigation.Location -> List Msg
 location2messages location =
   case String.dropLeft 1 location.hash of
     "" ->
-      [ SelectTab 0, BodyMsg (Body.LoadURLContent "blog")]
+      [ SelectTab 0]
     "about" ->
       [ SelectTab 1]
     str ->

@@ -17110,12 +17110,7 @@ var _fxmy$fxmygithubio$FxmyHeader$location2messages = function (location) {
 			return {
 				ctor: '::',
 				_0: _fxmy$fxmygithubio$FxmyHeader$SelectTab(0),
-				_1: {
-					ctor: '::',
-					_0: _fxmy$fxmygithubio$FxmyHeader$BodyMsg(
-						_fxmy$fxmygithubio$FxmyBody$LoadURLContent('blog')),
-					_1: {ctor: '[]'}
-				}
+				_1: {ctor: '[]'}
 			};
 		case 'about':
 			return {
