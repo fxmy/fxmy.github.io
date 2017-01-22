@@ -16041,6 +16041,16 @@ var _fxmy$fxmygithubio$FxmyBody$set_content_url = F2(
 var _fxmy$fxmygithubio$FxmyBody$get_content_url = function (model) {
 	return model.content_url;
 };
+var _fxmy$fxmygithubio$FxmyBody$comment_view = function (model) {
+	return _elm_lang$core$Native_Utils.eq(model.content_url, 'blog') ? _elm_lang$html$Html$text('') : A2(
+		_elm_lang$html$Html$h4,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(model.comment),
+			_1: {ctor: '[]'}
+		});
+};
 var _fxmy$fxmygithubio$FxmyBody$commentit_view = function (model) {
 	return _elm_lang$core$Native_Utils.eq(model.content_url, 'blog') ? _elm_lang$html$Html$text('') : A2(
 		_elm_lang$html$Html$div,
@@ -16087,7 +16097,11 @@ var _fxmy$fxmygithubio$FxmyBody$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: _fxmy$fxmygithubio$FxmyBody$commentit_view(model),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _fxmy$fxmygithubio$FxmyBody$comment_view(model),
+						_1: {ctor: '[]'}
+					}
 				}
 			}
 		});
@@ -16099,7 +16113,7 @@ var _fxmy$fxmygithubio$FxmyBody$render = F2(
 			tag,
 			_fxmy$fxmygithubio$FxmyBody$view(model));
 	});
-var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '', content: '\n  '};
+var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '', content: '', comment_url: 'https://fxmy.github.io/_data/comments.yml', comment: ''};
 var _fxmy$fxmygithubio$FxmyBody$commentit = _elm_lang$core$Native_Platform.outgoingPort(
 	'commentit',
 	function (v) {
@@ -16108,10 +16122,17 @@ var _fxmy$fxmygithubio$FxmyBody$commentit = _elm_lang$core$Native_Platform.outgo
 var _fxmy$fxmygithubio$FxmyBody$commentit_cmd = function (model) {
 	return _elm_lang$core$Native_Utils.eq(model.content_url, 'blog') ? _elm_lang$core$Platform_Cmd$none : _fxmy$fxmygithubio$FxmyBody$commentit(model.content_url);
 };
-var _fxmy$fxmygithubio$FxmyBody$Model = F2(
-	function (a, b) {
-		return {content_url: a, content: b};
+var _fxmy$fxmygithubio$FxmyBody$Model = F4(
+	function (a, b, c, d) {
+		return {content_url: a, content: b, comment_url: c, comment: d};
 	});
+var _fxmy$fxmygithubio$FxmyBody$CommentContent = function (a) {
+	return {ctor: 'CommentContent', _0: a};
+};
+var _fxmy$fxmygithubio$FxmyBody$get_comment = function (model) {
+	var request = _elm_lang$http$Http$getString(model.comment_url);
+	return A2(_elm_lang$http$Http$send, _fxmy$fxmygithubio$FxmyBody$CommentContent, request);
+};
 var _fxmy$fxmygithubio$FxmyBody$BlogContent = function (a) {
 	return {ctor: 'BlogContent', _0: a};
 };
@@ -16123,43 +16144,69 @@ var _fxmy$fxmygithubio$FxmyBody$get_content = function (model) {
 var _fxmy$fxmygithubio$FxmyBody$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'BlogContent') {
-			if (_p0._0.ctor === 'Ok') {
+		switch (_p0.ctor) {
+			case 'BlogContent':
+				if (_p0._0.ctor === 'Ok') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{content: _p0._0._0}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								content: A2(
+									_elm_lang$core$Basics_ops['++'],
+									'(ﾟДﾟ≡ﾟДﾟ) ',
+									_elm_lang$core$Basics$toString(_p0._0._0))
+							}),
+						{ctor: '[]'});
+				}
+			case 'LoadURLContent':
+				var modelNew = _elm_lang$core$Native_Utils.update(
+					model,
+					{content_url: _p0._0});
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{content: _p0._0._0}),
-					{ctor: '[]'});
-			} else {
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							content: A2(
-								_elm_lang$core$Basics_ops['++'],
-								'(ﾟДﾟ≡ﾟДﾟ) ',
-								_elm_lang$core$Basics$toString(_p0._0._0))
-						}),
-					{ctor: '[]'});
-			}
-		} else {
-			var modelNew = _elm_lang$core$Native_Utils.update(
-				model,
-				{content_url: _p0._0});
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				modelNew,
-				{
-					ctor: '::',
-					_0: _fxmy$fxmygithubio$FxmyBody$get_content(modelNew),
-					_1: {
+					modelNew,
+					{
 						ctor: '::',
-						_0: _fxmy$fxmygithubio$FxmyBody$commentit_cmd(modelNew),
-						_1: {ctor: '[]'}
-					}
-				});
+						_0: _fxmy$fxmygithubio$FxmyBody$get_content(modelNew),
+						_1: {
+							ctor: '::',
+							_0: _fxmy$fxmygithubio$FxmyBody$get_comment(modelNew),
+							_1: {
+								ctor: '::',
+								_0: _fxmy$fxmygithubio$FxmyBody$commentit_cmd(modelNew),
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			default:
+				if (_p0._0.ctor === 'Ok') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{comment: _p0._0._0}),
+						{ctor: '[]'});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								comment: A2(
+									_elm_lang$core$Basics_ops['++'],
+									'(ﾟДﾟ≡ﾟДﾟ) ',
+									_elm_lang$core$Basics$toString(_p0._0._0))
+							}),
+						{ctor: '[]'});
+				}
 		}
 	});
 var _fxmy$fxmygithubio$FxmyBody$LoadURLContent = function (a) {

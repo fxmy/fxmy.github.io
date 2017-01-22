@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Material
 import Material.Scheme
-import Material.Button as Button
+--import Material.Button as Button
 import Material.Layout as Layout
 import Material.Color as Color
 import Material.Options as Options exposing (css)

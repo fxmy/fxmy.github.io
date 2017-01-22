@@ -9,7 +9,9 @@ import Markdown
 -- MODEL
 type alias Model = {
   content_url : String,
-  content : String
+  content : String,
+  comment_url : String,
+  comment : String
   }
 
 initModel : Model
@@ -20,8 +22,9 @@ initModel = {
   respectively
   --}
   content_url = "",
-  content = """
-  """
+  content = "",
+  comment_url = "https://fxmy.github.io/_data/comments.yml",
+  comment = ""
   }
 
 
@@ -29,6 +32,7 @@ initModel = {
 type Msg =
   LoadURLContent String
     | BlogContent ( Result Http.Error String)
+    | CommentContent ( Result Http.Error String)
 
 
 port commentit : String -> Cmd msg
@@ -46,7 +50,14 @@ update msg model =
       let
           modelNew = { model | content_url = url}
       in
-          modelNew ! [ get_content modelNew, commentit_cmd modelNew]
+          modelNew
+            ! [get_content modelNew
+            , get_comment modelNew
+            , commentit_cmd modelNew]
+    CommentContent ( Ok comm) ->
+      { model | comment = comm} ! []
+    CommentContent ( Err why) ->
+      { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []
 
 
 -- VIEW
@@ -55,7 +66,8 @@ view model =
   div [] [
     h3 [][ text model.content_url],
     Markdown.toHtml [ style[ ("margin", "0 48px"), ("padding", "12px")]] model.content,
-    commentit_view model
+    commentit_view model,
+    comment_view model
     ]
 
 
@@ -75,6 +87,15 @@ get_content model =
       Http.send BlogContent request
 
 
+-- GET_COMMENT
+get_comment : Model -> Cmd Msg
+get_comment model =
+  let
+      request = Http.getString model.comment_url
+  in
+      Http.send CommentContent request
+
+
 -- SHOW_COMMENTIT
 commentit_cmd : Model -> Cmd Msg
 commentit_cmd model =
@@ -91,6 +112,15 @@ commentit_view model =
     text ""
   else
     div [ id "commentit"] []
+
+
+-- COMMENT_VIEW
+comment_view : Model -> Html Msg
+comment_view model =
+  if model.content_url == "blog" then
+    text ""
+  else
+    h4 [] [ text model.comment]
 
 
 -- MISC
