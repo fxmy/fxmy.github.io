@@ -37,3 +37,17 @@ posts/elm-not-so-static-site.md:
       picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
     content: '4th _(:3JZ)_'
     date: 2017-01-05T08:58:10.860Z
+  - author:
+      type: full
+      displayName: fxmy
+      url: 'https://github.com/fxmy'
+      picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
+    content: ccc
+    date: 2017-01-23T09:23:39.953Z
+  - author:
+      type: full
+      displayName: fxmy
+      url: 'https://github.com/fxmy'
+      picture: 'https://avatars.githubusercontent.com/u/3283415?v=3&s=73'
+    content: =3=
+    date: 2017-01-23T16:34:47.135Z
