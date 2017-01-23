@@ -16032,6 +16032,17 @@ var _evancz$elm_markdown$Markdown$Options = F4(
 		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
 	});
 
+var _fxmy$fxmygithubio$FxmyBody$delay = F2(
+	function (time, msg) {
+		return A2(
+			_elm_lang$core$Task$perform,
+			_elm_lang$core$Basics$identity,
+			A2(
+				_elm_lang$core$Task$andThen,
+				_elm_lang$core$Basics$always(
+					_elm_lang$core$Task$succeed(msg)),
+				_elm_lang$core$Process$sleep(time)));
+	});
 var _fxmy$fxmygithubio$FxmyBody$set_content_url = F2(
 	function (model, url) {
 		return _elm_lang$core$Native_Utils.update(
@@ -16126,6 +16137,7 @@ var _fxmy$fxmygithubio$FxmyBody$Model = F4(
 	function (a, b, c, d) {
 		return {content_url: a, content: b, comment_url: c, comment: d};
 	});
+var _fxmy$fxmygithubio$FxmyBody$LoadCommentit = {ctor: 'LoadCommentit'};
 var _fxmy$fxmygithubio$FxmyBody$CommentContent = function (a) {
 	return {ctor: 'CommentContent', _0: a};
 };
@@ -16181,10 +16193,19 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 							_0: _fxmy$fxmygithubio$FxmyBody$get_comment(modelNew),
 							_1: {
 								ctor: '::',
-								_0: _fxmy$fxmygithubio$FxmyBody$commentit_cmd(modelNew),
+								_0: A2(_fxmy$fxmygithubio$FxmyBody$delay, _elm_lang$core$Time$second * 5, _fxmy$fxmygithubio$FxmyBody$LoadCommentit),
 								_1: {ctor: '[]'}
 							}
 						}
+					});
+			case 'LoadCommentit':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _fxmy$fxmygithubio$FxmyBody$commentit_cmd(model),
+						_1: {ctor: '[]'}
 					});
 			default:
 				if (_p0._0.ctor === 'Ok') {

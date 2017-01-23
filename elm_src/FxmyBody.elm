@@ -5,6 +5,9 @@ import Html exposing (..)
 import Html.Attributes exposing (style, id)
 import Markdown
 import Debug
+import Process
+import Task
+import Time exposing (Time)
 
 
 -- MODEL
@@ -34,6 +37,7 @@ type Msg =
   LoadURLContent String
     | BlogContent ( Result Http.Error String)
     | CommentContent ( Result Http.Error String)
+    | LoadCommentit
 
 
 port commentit : String -> Cmd msg
@@ -54,7 +58,9 @@ update msg model =
           modelNew
             ! [get_content modelNew
             , get_comment modelNew
-            , commentit_cmd modelNew]
+            , delay ( Time.second*5) <| LoadCommentit]
+    LoadCommentit ->
+      model ! [ commentit_cmd model]
     CommentContent ( Ok comm) ->
       let
           _ = Debug.log "" comm
@@ -135,3 +141,9 @@ get_content_url model =
 set_content_url : Model -> String -> Model
 set_content_url model url =
   { model | content_url = url}
+
+delay : Time -> msg -> Cmd msg
+delay time msg =
+  Process.sleep time
+    |> Task.andThen (always <| Task.succeed msg)
+    |> Task.perform identity
