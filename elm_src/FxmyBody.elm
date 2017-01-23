@@ -4,6 +4,7 @@ import Http
 import Html exposing (..)
 import Html.Attributes exposing (style, id)
 import Markdown
+import Debug
 
 
 -- MODEL
@@ -55,6 +56,9 @@ update msg model =
             , get_comment modelNew
             , commentit_cmd modelNew]
     CommentContent ( Ok comm) ->
+      let
+          _ = Debug.log "" comm
+      in
       { model | comment = comm} ! []
     CommentContent ( Err why) ->
       { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []

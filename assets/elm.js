@@ -16188,11 +16188,13 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 					});
 			default:
 				if (_p0._0.ctor === 'Ok') {
+					var _p2 = _p0._0._0;
+					var _p1 = A2(_elm_lang$core$Debug$log, '', _p2);
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{comment: _p0._0._0}),
+							{comment: _p2}),
 						{ctor: '[]'});
 				} else {
 					return A2(
