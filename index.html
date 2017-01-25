@@ -76,6 +76,12 @@
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(commentit);
       });
 
+    // parse_yml
+      app.ports.parse_yml.subscribe(function(comments_yml){
+        json = jsyaml.load(comments_yml);
+        app.ports.comments_json.send(json);
+      });
+
       /** var commentitUsername = 'fxmy';
       var commentitRepo = 'fxmy/fxmy.github.io';
       (function() {

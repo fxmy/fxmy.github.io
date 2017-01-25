@@ -16124,7 +16124,7 @@ var _fxmy$fxmygithubio$FxmyBody$render = F2(
 			tag,
 			_fxmy$fxmygithubio$FxmyBody$view(model));
 	});
-var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '', content: '', comment_url: 'https://fxmy.github.io/_data/comments.yml', comment: ''};
+var _fxmy$fxmygithubio$FxmyBody$initModel = {content_url: '', content: '', comment_url: 'https://fxmy.github.io/_data/comments.yml', comment: '', comment_parsed: _elm_lang$core$Json_Encode$null};
 var _fxmy$fxmygithubio$FxmyBody$commentit = _elm_lang$core$Native_Platform.outgoingPort(
 	'commentit',
 	function (v) {
@@ -16133,10 +16133,22 @@ var _fxmy$fxmygithubio$FxmyBody$commentit = _elm_lang$core$Native_Platform.outgo
 var _fxmy$fxmygithubio$FxmyBody$commentit_cmd = function (model) {
 	return _elm_lang$core$Native_Utils.eq(model.content_url, 'blog') ? _elm_lang$core$Platform_Cmd$none : _fxmy$fxmygithubio$FxmyBody$commentit(model.content_url);
 };
-var _fxmy$fxmygithubio$FxmyBody$Model = F4(
-	function (a, b, c, d) {
-		return {content_url: a, content: b, comment_url: c, comment: d};
+var _fxmy$fxmygithubio$FxmyBody$parse_yml = _elm_lang$core$Native_Platform.outgoingPort(
+	'parse_yml',
+	function (v) {
+		return v;
 	});
+var _fxmy$fxmygithubio$FxmyBody$comments_json = _elm_lang$core$Native_Platform.incomingPort('comments_json', _elm_lang$core$Json_Decode$value);
+var _fxmy$fxmygithubio$FxmyBody$Model = F5(
+	function (a, b, c, d, e) {
+		return {content_url: a, content: b, comment_url: c, comment: d, comment_parsed: e};
+	});
+var _fxmy$fxmygithubio$FxmyBody$CommentJson = function (a) {
+	return {ctor: 'CommentJson', _0: a};
+};
+var _fxmy$fxmygithubio$FxmyBody$parse_comments = function (model) {
+	return _fxmy$fxmygithubio$FxmyBody$comments_json(_fxmy$fxmygithubio$FxmyBody$CommentJson);
+};
 var _fxmy$fxmygithubio$FxmyBody$LoadCommentit = {ctor: 'LoadCommentit'};
 var _fxmy$fxmygithubio$FxmyBody$CommentContent = function (a) {
 	return {ctor: 'CommentContent', _0: a};
@@ -16207,16 +16219,19 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 						_0: _fxmy$fxmygithubio$FxmyBody$commentit_cmd(model),
 						_1: {ctor: '[]'}
 					});
-			default:
+			case 'CommentContent':
 				if (_p0._0.ctor === 'Ok') {
-					var _p2 = _p0._0._0;
-					var _p1 = A2(_elm_lang$core$Debug$log, '', _p2);
+					var _p1 = _p0._0._0;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{comment: _p2}),
-						{ctor: '[]'});
+							{comment: _p1}),
+						{
+							ctor: '::',
+							_0: _fxmy$fxmygithubio$FxmyBody$parse_yml(_p1),
+							_1: {ctor: '[]'}
+						});
 				} else {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
@@ -16230,6 +16245,14 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 							}),
 						{ctor: '[]'});
 				}
+			default:
+				var _p2 = A2(_elm_lang$core$Debug$log, 'haha', 'hoho');
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{comment_parsed: _p0._0}),
+					{ctor: '[]'});
 		}
 	});
 var _fxmy$fxmygithubio$FxmyBody$LoadURLContent = function (a) {
@@ -17007,9 +17030,6 @@ var _fxmy$fxmygithubio$FxmyHeader$delta2url = F2(
 			}
 		}
 	});
-var _fxmy$fxmygithubio$FxmyHeader$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
 var _fxmy$fxmygithubio$FxmyHeader$view_about = function (model) {
 	return A2(
 		_elm_lang$html$Html$h2,
@@ -17123,6 +17143,17 @@ var _fxmy$fxmygithubio$FxmyHeader$update = F2(
 					});
 		}
 	});
+var _fxmy$fxmygithubio$FxmyHeader$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Platform_Sub$map,
+				_fxmy$fxmygithubio$FxmyHeader$BodyMsg,
+				_fxmy$fxmygithubio$FxmyBody$parse_comments(model.body)),
+			_1: {ctor: '[]'}
+		});
+};
 var _fxmy$fxmygithubio$FxmyHeader$SelectTab = function (a) {
 	return {ctor: 'SelectTab', _0: a};
 };

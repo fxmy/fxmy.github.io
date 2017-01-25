@@ -8,6 +8,7 @@ import Debug
 import Process
 import Task
 import Time exposing (Time)
+import Json.Encode
 
 
 -- MODEL
@@ -15,7 +16,8 @@ type alias Model = {
   content_url : String,
   content : String,
   comment_url : String,
-  comment : String
+  comment : String,
+  comment_parsed : Json.Encode.Value
   }
 
 initModel : Model
@@ -28,7 +30,8 @@ initModel = {
   content_url = "",
   content = "",
   comment_url = "https://fxmy.github.io/_data/comments.yml",
-  comment = ""
+  comment = "",
+  comment_parsed = Json.Encode.null
   }
 
 
@@ -38,9 +41,20 @@ type Msg =
     | BlogContent ( Result Http.Error String)
     | CommentContent ( Result Http.Error String)
     | LoadCommentit
+    | CommentJson Json.Encode.Value
 
 
+-- PORTS
 port commentit : String -> Cmd msg
+port parse_yml : String -> Cmd msg
+
+port comments_json : ( Json.Encode.Value -> msg) -> Sub msg
+
+
+-- SUBSCRIPTION
+parse_comments : Model -> Sub Msg
+parse_comments model =
+  comments_json CommentJson
 
 
 -- UPDATE
@@ -62,12 +76,15 @@ update msg model =
     LoadCommentit ->
       model ! [ commentit_cmd model]
     CommentContent ( Ok comm) ->
-      let
-          _ = Debug.log "" comm
-      in
-      { model | comment = comm} ! []
+      { model | comment = comm} ! [ parse_yml comm]
     CommentContent ( Err why) ->
       { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []
+    CommentJson value ->
+      let
+          _ = Debug.log "haha" "hoho"
+      in
+          { model | comment_parsed = value}
+          ! []
 
 
 -- VIEW

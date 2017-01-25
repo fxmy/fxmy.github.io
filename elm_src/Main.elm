@@ -116,7 +116,8 @@ update msg model =
 -- SUBSCRIPTIONS
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Sub.batch
+  [ Sub.map BodyMsg ( Body.parse_comments model.body)]
 
 
 -- ROUTING
