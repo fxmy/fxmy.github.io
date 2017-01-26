@@ -16136,7 +16136,7 @@ var _fxmy$fxmygithubio$FxmyBody$commentit_cmd = function (model) {
 var _fxmy$fxmygithubio$FxmyBody$parse_yml = _elm_lang$core$Native_Platform.outgoingPort(
 	'parse_yml',
 	function (v) {
-		return v;
+		return [v._0, v._1];
 	});
 var _fxmy$fxmygithubio$FxmyBody$comments_json = _elm_lang$core$Native_Platform.incomingPort('comments_json', _elm_lang$core$Json_Decode$value);
 var _fxmy$fxmygithubio$FxmyBody$Model = F5(
@@ -16229,7 +16229,8 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 							{comment: _p1}),
 						{
 							ctor: '::',
-							_0: _fxmy$fxmygithubio$FxmyBody$parse_yml(_p1),
+							_0: _fxmy$fxmygithubio$FxmyBody$parse_yml(
+								{ctor: '_Tuple2', _0: _p1, _1: model.content_url}),
 							_1: {ctor: '[]'}
 						});
 				} else {

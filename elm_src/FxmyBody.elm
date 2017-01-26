@@ -46,7 +46,7 @@ type Msg =
 
 -- PORTS
 port commentit : String -> Cmd msg
-port parse_yml : String -> Cmd msg
+port parse_yml : (String, String) -> Cmd msg
 
 port comments_json : ( Json.Encode.Value -> msg) -> Sub msg
 
@@ -76,7 +76,8 @@ update msg model =
     LoadCommentit ->
       model ! [ commentit_cmd model]
     CommentContent ( Ok comm) ->
-      { model | comment = comm} ! [ parse_yml comm]
+      { model | comment = comm}
+      ! [ parse_yml (comm, model.content_url)]
     CommentContent ( Err why) ->
       { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []
     CommentJson value ->

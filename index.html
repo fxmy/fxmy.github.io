@@ -77,9 +77,10 @@
       });
 
     // parse_yml
-      app.ports.parse_yml.subscribe(function(comments_yml){
-        json = jsyaml.load(comments_yml);
-        app.ports.comments_json.send(json);
+      app.ports.parse_yml.subscribe(function(yml_with_commentId){
+        //index0 will be the yaml, index1 will be the commentId
+        json = jsyaml.load(yml_with_commentId[0]);
+        app.ports.comments_json.send(json[yml_with_commentId[1]]);
       });
 
       /** var commentitUsername = 'fxmy';
