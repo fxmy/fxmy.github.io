@@ -2,22 +2,39 @@ port module FxmyBody exposing (..)
 
 import Http
 import Html exposing (..)
-import Html.Attributes exposing (style, id)
+import Html.Attributes exposing (style, id, src, href, height, width)
 import Markdown
 import Debug
 import Process
 import Task
 import Time exposing (Time)
 import Json.Encode
+import Json.Decode as Decode
+import Json.Decode.Extra as DecodeExtra
+import Date
+import ElmEscapeHtml exposing (unescape)
 
 
 -- MODEL
+type alias Author = {
+  type_ : String,
+  displayName : String,
+  url : String,
+  picture : String
+  }
+
+type alias CommentEntry = {
+  author : Author,
+  content : String,
+  date : String --Date.Date
+  }
+
 type alias Model = {
   content_url : String,
   content : String,
   comment_url : String,
   comment : String,
-  comment_parsed : Json.Encode.Value
+  comment_parsed : List CommentEntry
   }
 
 initModel : Model
@@ -31,7 +48,7 @@ initModel = {
   content = "",
   comment_url = "https://fxmy.github.io/_data/comments.yml",
   comment = "",
-  comment_parsed = Json.Encode.null
+  comment_parsed = []
   }
 
 
@@ -82,16 +99,19 @@ update msg model =
       { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []
     CommentJson value ->
       let
-          _ = Debug.log "haha" "hoho"
+          commList = --Decode.decodeValue commentDecoder value
+            Decode.decodeValue commentDecoder value
+              |> Result.withDefault []
+          _ = Debug.log "LENGTH" <| List.length commList
       in
-          { model | comment_parsed = value}
+          { model | comment_parsed = List.reverse commList}
           ! []
 
 
 -- VIEW
 view : Model -> Html Msg
 view model =
-  div [] [
+  div [ style[ ("margin", "0 48px"), ("padding", "12px")]] [
     h3 [][ text model.content_url],
     Markdown.toHtml [ style[ ("margin", "0 48px"), ("padding", "12px")]] model.content,
     commentit_view model,
@@ -148,8 +168,23 @@ comment_view model =
   if model.content_url == "blog" then
     text ""
   else
-    h4 [] [ text model.comment]
+    div [ id "comments"]
+    (List.map comment_entry_view model.comment_parsed)
 
+
+-- COMMENT_ENTRY_VIEW
+comment_entry_view : CommentEntry -> Html Msg
+comment_entry_view entry =
+  div[]
+  [ img [src entry.author.picture, height 40, width 40] []
+  , a [ href entry.author.url,style [("margin", "0 6px"), ("padding", "12px")]]
+    [ text entry.author.displayName]
+  , br [] []
+  , span [] [ text entry.date]
+  , br [] []
+  , h5 [] [text <| unescape entry.content]
+  , hr [] []
+    ]
 
 -- MISC
 get_content_url : Model -> String
@@ -165,3 +200,51 @@ delay time msg =
   Process.sleep time
     |> Task.andThen (always <| Task.succeed msg)
     |> Task.perform identity
+
+{--
+commcontntDecoder : Decode.Decoder (List String)
+commcontntDecoder =
+  Decode.list ( Decode.field "content" Decode.string)
+
+commLength : Json.Encode.Value -> Int
+commLength value =
+  let
+      counter = Decode.map List.length commcontntDecoder
+  in
+      case Decode.decodeValue counter value of
+        Ok length ->
+          length
+        Err dontcare ->
+          0
+          --}
+
+authorDecoder : Decode.Decoder Author
+authorDecoder =
+    Decode.map4 Author
+      ( Decode.at ["type"] Decode.string)
+      ( Decode.at ["displayName"] Decode.string)
+      ( Decode.at ["url"] Decode.string)
+      ( Decode.at ["picture"] Decode.string)
+
+commentDecoder : Decode.Decoder (List CommentEntry)
+commentDecoder =
+  Decode.list <|
+    Decode.map3 CommentEntry
+    ( Decode.at ["author"] authorDecoder)
+    ( Decode.at ["content"] Decode.string)
+    ( Decode.at ["date"] Decode.value |> Decode.map (\v->toString v))
+
+{--
+It seems that when receiving JSON from port, ISO-8601
+Date format is auto casted to Date.Date by Elm, but
+still is of type Json.Encode.Value. So we turn this into
+a String, then call Date.fromString.
+
+which does not work because Date.fromString can`t handle strings
+like "<Thu Jan 05 2017 16:44:30 GMT+0800 (CST)>"
+--}
+dateDecoder : Decode.Decoder Date.Date
+dateDecoder =
+  Decode.value
+    |> Decode.andThen
+    ( toString >> Date.fromString >> DecodeExtra.fromResult)

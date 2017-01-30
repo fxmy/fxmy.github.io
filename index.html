@@ -81,6 +81,7 @@
         //index0 will be the yaml, index1 will be the commentId
         json = jsyaml.load(yml_with_commentId[0]);
         app.ports.comments_json.send(json[yml_with_commentId[1]]);
+        //console.log(JSON.stringify(json[yml_with_commentId[1]]));
       });
 
       /** var commentitUsername = 'fxmy';
