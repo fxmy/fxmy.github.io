@@ -29,6 +29,9 @@ process_lines(IoDevice, Acc) ->
       file:close(IoDevice);
     {error, ErrorDes} ->
       io:format("!!ERROR: ~tp~n", [ErrorDes]);
+    "\n" ->
+      io:format("Skipping empty lines.~n"),
+      process_lines(IoDevice, Acc);
     Data ->
       {Desc, Link} = split_parentheses(Data),
       io:format("!!DES: ~s~n!!LINK: ~s~n~n", [Desc, Link]),
