@@ -66,7 +66,7 @@ rss_items(List) ->
 rss_items([], Acc) ->
   Acc;
 rss_items([{Desc, Link}| Rest], Acc) ->
-  Item = "<item><title>"++Desc++"</title><description>"++Desc++"</description><link>https://fxmy.github.io/"++Link++"</link><author>fxmy</author></item>" ++ Acc,
+  Item = ["<item><title>"++Desc++"</title><description>"++Desc++"</description><link>https://fxmy.github.io/"++Link++"</link><author>fxmy</author></item>" | Acc],
   rss_items(Rest, Item).
 
 rss_channel(Items) ->
