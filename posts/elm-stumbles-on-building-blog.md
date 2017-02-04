@@ -150,10 +150,41 @@ commentDecoder =
 
 --------------------
 ##然后说一下在此过程中踩到的坑##
-- Turns ISO 8601 date format strings into Date.Date silently while still tags it as Json.Encode.Value when receiving JSON from ports.
-- View is called after Update leads to possible race condition when a Cmd finished even before View is called while the result of the Cmd depends on the result of View. Case : initing commentit. Solution : delayed initialization of commentit.
+- 在从ports接收JSON的时候Elm会把ISO 8601 date format的字符串悄咪咪的转换成Date类型，然鹅并没有提供Decode.date的方法，编译器仍然认为他的类型是Json.Encode.Value，最后只好用丑陋的`Decode.at ["date"] Decode.value |> Decode.map (\v->toString v)`形式强行按照string显示。
+- Elm的架构设计决定了View是在Update之后调用的，那么当Update返回带有副作用的Cmd msg时，如果副作用在View之前执行结束就会出现race condition。一个典型的例子是通过ports加载commentit的时候在墙外会报错找不到commentit的div，而在墙内由于加载速度慢反而不会出现问题（肥肠感谢，GFW）。最后也是采用了延迟加载的办法。
 
 --------------------
-##WARP UP##
-- One of the awesomeness of Elm is that if it compiles, it works. If it doesn't work, then there maybe logic flaws in your code.
-- Need to get used to manipulating & composing functions to achieve your goal. Composing/manipulating/chaining first classed functions together into a new function is bit like squeezing octopus through coin-sized hole, doable, but brain hurting. But as long as it's done, you've got yourself a specialized hammer for this special problem, then all you need is just to BAM/SMACK/POW.
+##总结##
+- Elm很屌的一个地方就是：如果编译能通过，八成执行起来就没问题；如果执行起来有问题，那八成是你自己的代码逻辑有问题。[σ\`∀´) ﾟ∀ﾟ)σ](https://www.destroyallsoftware.com/talks/wat)
+- Elm里各种变换、组合一等函数来产生新函数的现象肥肠普遍，甚至比操作数据来的普遍的多。组合、变换来产生完成特定功能的函数的同时还要满足类型签名的要求有点伤脑，就像把章鱼挤进一串硬币大小的洞里最后得到一只吃鱼的兔子一样……
+    看一下这个延迟加载的例子：
+    ```elm
+    Process.sleep : Time -> Task x ()
+    always : a -> b -> a
+    identity : a -> a
+    Task.succeed : a -> Task x a
+    Task.andThen : (a -> Task x b) -> Task x a -> Task x b
+    Task.perform : (a -> msg) -> Task Never a -> Cmd msg
+
+    delay : Time -> msg -> Cmd msg
+    delay time msg =
+      Process.sleep time
+        |> Task.andThen (always <| Task.succeed msg)
+        |> Task.perform identity
+    ```
+    --------------------------
+    ```elm
+    Process.sleep time = Task x ()
+    (always <| Task.succeed msg) = b -> (Task x msg)
+    Task.andThen (b -> (Task x msg)) (Task x ()) = Task x msg
+    Task.perform identity (Task x msg) = Cmd msg
+    ```
+    用的时候像这样：
+    ```elm
+    -- 5s之后产生一个LoadCommentit消息
+    delay ( Time.second*5) <| LoadCommentit
+    ```
+    真是……严丝合缝啊。( ﾟ∀。)
+
+--------------------
+#ﾟ ∀ﾟ)ノ#
