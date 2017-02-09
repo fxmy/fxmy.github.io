@@ -79,12 +79,12 @@
     // parse_yml
       app.ports.parse_yml.subscribe(function(yml_with_commentId){
         //index0 will be the yaml, index1 will be the commentId
-        json = jsyaml.load(yml_with_commentId[0]);
-        parsed = json[yml_with_commentId[1]];
+        var json = jsyaml.load(yml_with_commentId[0]);
+        var parsed = json[yml_with_commentId[1]];
         if(parsed != undefined){
-          app.ports.comments_json.send(JSON.stringify(json[yml_with_commentId[1]]));
+          app.ports.comments_json.send(JSON.stringify(parsed));
         } else
-          console.log('No comments on this post');
+          app.ports.comments_json.send("No comments on this post");
       });
 
       /** var commentitUsername = 'fxmy';
