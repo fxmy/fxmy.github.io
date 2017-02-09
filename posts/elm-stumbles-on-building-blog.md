@@ -150,7 +150,7 @@ commentDecoder =
 
 --------------------
 ##然后说一下在此过程中踩到的坑##
-- ~~~在从ports接收JSON的时候Elm会把ISO 8601 date format的字符串悄咪咪的转换成Date类型，然鹅并没有提供Decode.date的方法，编译器仍然认为他的类型是Json.Encode.Value，最后只好用丑陋的`Decode.at ["date"] Decode.value |> Decode.map (\v->toString v)`形式强行按照string显示。~~~ 其实这是js-yaml的锅，没想到啊没想到=。。=
+- ~~在从ports接收JSON的时候Elm会把ISO 8601 date format的字符串悄咪咪的转换成Date类型，然鹅并没有提供Decode.date的方法，编译器仍然认为他的类型是Json.Encode.Value，最后只好用丑陋的`Decode.at ["date"] Decode.value |> Decode.map (\v->toString v)`形式强行按照string显示。~~ 其实这是js-yaml的锅，没想到啊没想到=。。=
 - Elm的架构设计决定了View是在Update之后调用的，那么当Update返回带有副作用的Cmd msg时，如果副作用在View之前执行结束就会出现race condition。一个典型的例子是通过ports加载commentit的时候在墙外会报错找不到commentit的div，而在墙内由于加载速度慢反而不会出现问题（肥肠感谢，GFW）。最后也是采用了延迟加载的办法。
 
 --------------------
