@@ -93,7 +93,7 @@ update msg model =
     LoadCommentit ->
       model ! [ commentit_cmd model]
     CommentContent ( Ok comm) ->
-      { model | comment = comm}
+      { model | comment = comm, comment_parsed = []}
       ! [ parse_yml (comm, model.content_url)]
     CommentContent ( Err why) ->
       { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []

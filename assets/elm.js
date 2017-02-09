@@ -18879,7 +18879,10 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{comment: _p1}),
+							{
+								comment: _p1,
+								comment_parsed: {ctor: '[]'}
+							}),
 						{
 							ctor: '::',
 							_0: _fxmy$fxmygithubio$FxmyBody$parse_yml(
