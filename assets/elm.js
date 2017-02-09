@@ -18763,34 +18763,35 @@ var _fxmy$fxmygithubio$FxmyBody$CommentEntry = F3(
 	function (a, b, c) {
 		return {author: a, content: b, date: c};
 	});
-var _fxmy$fxmygithubio$FxmyBody$commentDecoder = _elm_lang$core$Json_Decode$list(
-	A4(
-		_elm_lang$core$Json_Decode$map3,
-		_fxmy$fxmygithubio$FxmyBody$CommentEntry,
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'author',
-				_1: {ctor: '[]'}
-			},
-			_fxmy$fxmygithubio$FxmyBody$authorDecoder),
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'content',
-				_1: {ctor: '[]'}
-			},
-			_elm_lang$core$Json_Decode$string),
-		A2(
-			_elm_lang$core$Json_Decode$at,
-			{
-				ctor: '::',
-				_0: 'date',
-				_1: {ctor: '[]'}
-			},
-			_elm_community$json_extra$Json_Decode_Extra$date)));
+var _fxmy$fxmygithubio$FxmyBody$commentDecoder = _elm_lang$core$Json_Decode$maybe(
+	_elm_lang$core$Json_Decode$list(
+		A4(
+			_elm_lang$core$Json_Decode$map3,
+			_fxmy$fxmygithubio$FxmyBody$CommentEntry,
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'author',
+					_1: {ctor: '[]'}
+				},
+				_fxmy$fxmygithubio$FxmyBody$authorDecoder),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'content',
+					_1: {ctor: '[]'}
+				},
+				_elm_lang$core$Json_Decode$string),
+			A2(
+				_elm_lang$core$Json_Decode$at,
+				{
+					ctor: '::',
+					_0: 'date',
+					_1: {ctor: '[]'}
+				},
+				_elm_community$json_extra$Json_Decode_Extra$date))));
 var _fxmy$fxmygithubio$FxmyBody$Model = F5(
 	function (a, b, c, d, e) {
 		return {content_url: a, content: b, comment_url: c, comment: d, comment_parsed: e};
@@ -18900,9 +18901,13 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 				}
 			default:
 				var commList = A2(
-					_elm_lang$core$Result$withDefault,
+					_elm_lang$core$Maybe$withDefault,
 					{ctor: '[]'},
-					A2(_elm_lang$core$Json_Decode$decodeString, _fxmy$fxmygithubio$FxmyBody$commentDecoder, _p0._0));
+					A2(
+						_elm_lang$core$Result$withDefault,
+						_elm_lang$core$Maybe$Just(
+							{ctor: '[]'}),
+						A2(_elm_lang$core$Json_Decode$decodeString, _fxmy$fxmygithubio$FxmyBody$commentDecoder, _p0._0)));
 				var _p2 = A2(
 					_elm_lang$core$Debug$log,
 					'LENGTH',

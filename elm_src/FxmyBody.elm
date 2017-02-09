@@ -12,6 +12,7 @@ import Json.Decode as Decode
 import Json.Decode.Extra as DecodeExtra
 import Date
 import ElmEscapeHtml exposing (unescape)
+import Maybe exposing (Maybe)
 
 
 -- MODEL
@@ -100,7 +101,8 @@ update msg model =
       let
           commList = --Decode.decodeValue commentDecoder value
             Decode.decodeString commentDecoder string
-              |> Result.withDefault []
+              |> Result.withDefault (Maybe.Just [])
+              |> Maybe.withDefault []
           _ = Debug.log "LENGTH" <| List.length commList
       in
           { model | comment_parsed = List.reverse commList}
@@ -208,10 +210,11 @@ authorDecoder =
       ( Decode.at ["url"] Decode.string)
       ( Decode.at ["picture"] Decode.string)
 
-commentDecoder : Decode.Decoder (List CommentEntry)
+commentDecoder : Decode.Decoder (Maybe (List CommentEntry))
 commentDecoder =
-  Decode.list <|
+  (Decode.list <|
     Decode.map3 CommentEntry
     ( Decode.at ["author"] authorDecoder)
     ( Decode.at ["content"] Decode.string)
-    ( Decode.at ["date"] DecodeExtra.date)
+    ( Decode.at ["date"] DecodeExtra.date))
+    |> Decode.maybe
