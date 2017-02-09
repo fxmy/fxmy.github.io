@@ -18496,14 +18496,6 @@ var _marcosh$elm_html_to_unicode$ElmEscapeHtml$convert = F2(
 var _marcosh$elm_html_to_unicode$ElmEscapeHtml$unescape = _marcosh$elm_html_to_unicode$ElmEscapeHtml$convert(_marcosh$elm_html_to_unicode$ElmEscapeHtml$unescapeChars);
 var _marcosh$elm_html_to_unicode$ElmEscapeHtml$escape = _marcosh$elm_html_to_unicode$ElmEscapeHtml$convert(_marcosh$elm_html_to_unicode$ElmEscapeHtml$escapeChars);
 
-var _fxmy$fxmygithubio$FxmyBody$dateDecoder = A2(
-	_elm_lang$core$Json_Decode$andThen,
-	function (_p0) {
-		return _elm_community$json_extra$Json_Decode_Extra$fromResult(
-			_elm_lang$core$Date$fromString(
-				_elm_lang$core$Basics$toString(_p0)));
-	},
-	_elm_lang$core$Json_Decode$value);
 var _fxmy$fxmygithubio$FxmyBody$delay = F2(
 	function (time, msg) {
 		return A2(
@@ -18586,7 +18578,8 @@ var _fxmy$fxmygithubio$FxmyBody$comment_entry_view = function (entry) {
 							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(entry.date),
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(entry.date)),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -18726,7 +18719,7 @@ var _fxmy$fxmygithubio$FxmyBody$parse_yml = _elm_lang$core$Native_Platform.outgo
 	function (v) {
 		return [v._0, v._1];
 	});
-var _fxmy$fxmygithubio$FxmyBody$comments_json = _elm_lang$core$Native_Platform.incomingPort('comments_json', _elm_lang$core$Json_Decode$value);
+var _fxmy$fxmygithubio$FxmyBody$comments_json = _elm_lang$core$Native_Platform.incomingPort('comments_json', _elm_lang$core$Json_Decode$string);
 var _fxmy$fxmygithubio$FxmyBody$Author = F4(
 	function (a, b, c, d) {
 		return {type_: a, displayName: b, url: c, picture: d};
@@ -18791,18 +18784,13 @@ var _fxmy$fxmygithubio$FxmyBody$commentDecoder = _elm_lang$core$Json_Decode$list
 			},
 			_elm_lang$core$Json_Decode$string),
 		A2(
-			_elm_lang$core$Json_Decode$map,
-			function (v) {
-				return _elm_lang$core$Basics$toString(v);
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'date',
+				_1: {ctor: '[]'}
 			},
-			A2(
-				_elm_lang$core$Json_Decode$at,
-				{
-					ctor: '::',
-					_0: 'date',
-					_1: {ctor: '[]'}
-				},
-				_elm_lang$core$Json_Decode$value))));
+			_elm_community$json_extra$Json_Decode_Extra$date)));
 var _fxmy$fxmygithubio$FxmyBody$Model = F5(
 	function (a, b, c, d, e) {
 		return {content_url: a, content: b, comment_url: c, comment: d, comment_parsed: e};
@@ -18831,15 +18819,15 @@ var _fxmy$fxmygithubio$FxmyBody$get_content = function (model) {
 };
 var _fxmy$fxmygithubio$FxmyBody$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
 			case 'BlogContent':
-				if (_p1._0.ctor === 'Ok') {
+				if (_p0._0.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{content: _p1._0._0}),
+							{content: _p0._0._0}),
 						{ctor: '[]'});
 				} else {
 					return A2(
@@ -18850,14 +18838,14 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 								content: A2(
 									_elm_lang$core$Basics_ops['++'],
 									'(ﾟДﾟ≡ﾟДﾟ) ',
-									_elm_lang$core$Basics$toString(_p1._0._0))
+									_elm_lang$core$Basics$toString(_p0._0._0))
 							}),
 						{ctor: '[]'});
 				}
 			case 'LoadURLContent':
 				var modelNew = _elm_lang$core$Native_Utils.update(
 					model,
-					{content_url: _p1._0});
+					{content_url: _p0._0});
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					modelNew,
@@ -18884,17 +18872,17 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 						_1: {ctor: '[]'}
 					});
 			case 'CommentContent':
-				if (_p1._0.ctor === 'Ok') {
-					var _p2 = _p1._0._0;
+				if (_p0._0.ctor === 'Ok') {
+					var _p1 = _p0._0._0;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
-							{comment: _p2}),
+							{comment: _p1}),
 						{
 							ctor: '::',
 							_0: _fxmy$fxmygithubio$FxmyBody$parse_yml(
-								{ctor: '_Tuple2', _0: _p2, _1: model.content_url}),
+								{ctor: '_Tuple2', _0: _p1, _1: model.content_url}),
 							_1: {ctor: '[]'}
 						});
 				} else {
@@ -18906,7 +18894,7 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 								comment: A2(
 									_elm_lang$core$Basics_ops['++'],
 									'(ﾟДﾟ≡ﾟДﾟ) ',
-									_elm_lang$core$Basics$toString(_p1._0._0))
+									_elm_lang$core$Basics$toString(_p0._0._0))
 							}),
 						{ctor: '[]'});
 				}
@@ -18914,8 +18902,8 @@ var _fxmy$fxmygithubio$FxmyBody$update = F2(
 				var commList = A2(
 					_elm_lang$core$Result$withDefault,
 					{ctor: '[]'},
-					A2(_elm_lang$core$Json_Decode$decodeValue, _fxmy$fxmygithubio$FxmyBody$commentDecoder, _p1._0));
-				var _p3 = A2(
+					A2(_elm_lang$core$Json_Decode$decodeString, _fxmy$fxmygithubio$FxmyBody$commentDecoder, _p0._0));
+				var _p2 = A2(
 					_elm_lang$core$Debug$log,
 					'LENGTH',
 					_elm_lang$core$List$length(commList));

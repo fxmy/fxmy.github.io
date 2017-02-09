@@ -8,7 +8,6 @@ import Debug
 import Process
 import Task
 import Time exposing (Time)
-import Json.Encode
 import Json.Decode as Decode
 import Json.Decode.Extra as DecodeExtra
 import Date
@@ -26,7 +25,7 @@ type alias Author = {
 type alias CommentEntry = {
   author : Author,
   content : String,
-  date : String --Date.Date
+  date : Date.Date
   }
 
 type alias Model = {
@@ -58,14 +57,14 @@ type Msg =
     | BlogContent ( Result Http.Error String)
     | CommentContent ( Result Http.Error String)
     | LoadCommentit
-    | CommentJson Json.Encode.Value
+    | CommentJson String
 
 
 -- PORTS
 port commentit : String -> Cmd msg
 port parse_yml : (String, String) -> Cmd msg
 
-port comments_json : ( Json.Encode.Value -> msg) -> Sub msg
+port comments_json : ( String -> msg) -> Sub msg
 
 
 -- SUBSCRIPTION
@@ -97,10 +96,10 @@ update msg model =
       ! [ parse_yml (comm, model.content_url)]
     CommentContent ( Err why) ->
       { model | comment = "(ﾟДﾟ≡ﾟДﾟ) " ++ ( toString why)} ! []
-    CommentJson value ->
+    CommentJson string ->
       let
           commList = --Decode.decodeValue commentDecoder value
-            Decode.decodeValue commentDecoder value
+            Decode.decodeString commentDecoder string
               |> Result.withDefault []
           _ = Debug.log "LENGTH" <| List.length commList
       in
@@ -180,7 +179,7 @@ comment_entry_view entry =
   , a [ href entry.author.url,style [("margin", "0 6px"), ("padding", "12px")]]
     [ text entry.author.displayName]
   , br [] []
-  , span [] [ text entry.date]
+  , span [] [ text <| toString entry.date]
   , br [] []
   , h5 [] [text <| unescape entry.content]
   , hr [] []
@@ -201,23 +200,6 @@ delay time msg =
     |> Task.andThen (always <| Task.succeed msg)
     |> Task.perform identity
 
-{--
-commcontntDecoder : Decode.Decoder (List String)
-commcontntDecoder =
-  Decode.list ( Decode.field "content" Decode.string)
-
-commLength : Json.Encode.Value -> Int
-commLength value =
-  let
-      counter = Decode.map List.length commcontntDecoder
-  in
-      case Decode.decodeValue counter value of
-        Ok length ->
-          length
-        Err dontcare ->
-          0
-          --}
-
 authorDecoder : Decode.Decoder Author
 authorDecoder =
     Decode.map4 Author
@@ -232,19 +214,4 @@ commentDecoder =
     Decode.map3 CommentEntry
     ( Decode.at ["author"] authorDecoder)
     ( Decode.at ["content"] Decode.string)
-    ( Decode.at ["date"] Decode.value |> Decode.map (\v->toString v))
-
-{--
-It seems that when receiving JSON from port, ISO-8601
-Date format is auto casted to Date.Date by Elm, but
-still is of type Json.Encode.Value. So we turn this into
-a String, then call Date.fromString.
-
-which does not work because Date.fromString can`t handle strings
-like "<Thu Jan 05 2017 16:44:30 GMT+0800 (CST)>"
---}
-dateDecoder : Decode.Decoder Date.Date
-dateDecoder =
-  Decode.value
-    |> Decode.andThen
-    ( toString >> Date.fromString >> DecodeExtra.fromResult)
+    ( Decode.at ["date"] DecodeExtra.date)
