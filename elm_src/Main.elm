@@ -3,7 +3,7 @@ module FxmyHeader exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (href, class, style)
 import Material
-import Material.Scheme
+--import Material.Scheme
 --import Material.Button as Button
 import Material.Layout as Layout
 import Material.Color as Color
@@ -46,7 +46,7 @@ type Msg =
 -- VIEW
 view : Model -> Html Msg
 view model =
-  Material.Scheme.topWithScheme Color.Teal Color.Pink <|
+  --Material.Scheme.topWithScheme Color.Teal Color.Pink <|
     Layout.render Mdl model.mdl
     [ Layout.fixedHeader,
       Layout.waterfall True,
