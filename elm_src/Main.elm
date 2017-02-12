@@ -180,6 +180,8 @@ main =
 pub_key : String
 pub_key =
   """
+/62A5 66FA 34AD 758E 067C  7B10 A9B1 2A60 F442 05F6
+
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v2
 
