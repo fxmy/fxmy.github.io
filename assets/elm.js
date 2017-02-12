@@ -15095,67 +15095,161 @@ var _elm_lang$core$Regex$AtMost = function (a) {
 };
 var _elm_lang$core$Regex$All = {ctor: 'All'};
 
-var _MichaelCombs28$elm_mdl$Material_Scheme$scheme = F2(
-	function (primary, accent) {
+var _MichaelCombs28$elm_mdl$Material_Grid$clip = F3(
+	function (lower, upper, k) {
 		return A2(
-			_elm_lang$core$String$join,
-			'\n',
-			A2(
-				_elm_lang$core$List$map,
-				function (url) {
-					return A2(
-						_elm_lang$core$Basics_ops['++'],
-						'@import url(',
-						A2(_elm_lang$core$Basics_ops['++'], url, ');'));
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$core$Basics_ops['++'],
-						'https://code.getmdl.io/1.2.0/',
-						A2(_MichaelCombs28$elm_mdl$Material_Color$scheme, primary, accent)),
-					_1: {
-						ctor: '::',
-						_0: 'https://fonts.googleapis.com/icon?family=Material+Icons',
-						_1: {
-							ctor: '::',
-							_0: 'https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext',
-							_1: {ctor: '[]'}
-						}
-					}
-				}));
+			_elm_lang$core$Basics$max,
+			lower,
+			A2(_elm_lang$core$Basics$min, k, upper));
 	});
-var _MichaelCombs28$elm_mdl$Material_Scheme$topWithScheme = F3(
-	function (primary, accent, content) {
+var _MichaelCombs28$elm_mdl$Material_Grid$stretch = _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-cell--stretch');
+var _MichaelCombs28$elm_mdl$Material_Grid$align = function (a) {
+	var _p0 = a;
+	switch (_p0.ctor) {
+		case 'Top':
+			return _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-cell--top');
+		case 'Middle':
+			return _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-cell--middle');
+		default:
+			return _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-cell--bottom');
+	}
+};
+var _MichaelCombs28$elm_mdl$Material_Grid$suffix = function (device) {
+	var _p1 = device;
+	switch (_p1.ctor) {
+		case 'All':
+			return '';
+		case 'Desktop':
+			return '-desktop';
+		case 'Tablet':
+			return '-tablet';
+		default:
+			return '-phone';
+	}
+};
+var _MichaelCombs28$elm_mdl$Material_Grid$size = F2(
+	function (device, k) {
+		var c = function () {
+			var _p2 = device;
+			switch (_p2.ctor) {
+				case 'All':
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 12, k);
+				case 'Desktop':
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 12, k);
+				case 'Tablet':
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 8, k);
+				default:
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 4, k);
+			}
+		}();
+		return _MichaelCombs28$elm_mdl$Material_Options$cs(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'mdl-cell--',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(c),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'-col',
+						_MichaelCombs28$elm_mdl$Material_Grid$suffix(device)))));
+	});
+var _MichaelCombs28$elm_mdl$Material_Grid$offset = F2(
+	function (device, k) {
+		var c = function () {
+			var _p3 = device;
+			switch (_p3.ctor) {
+				case 'All':
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 11, k);
+				case 'Desktop':
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 11, k);
+				case 'Tablet':
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 7, k);
+				default:
+					return A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 3, k);
+			}
+		}();
+		return _MichaelCombs28$elm_mdl$Material_Options$cs(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'mdl-cell--',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(c),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'-offset',
+						_MichaelCombs28$elm_mdl$Material_Grid$suffix(device)))));
+	});
+var _MichaelCombs28$elm_mdl$Material_Grid$hide = function (device) {
+	return _MichaelCombs28$elm_mdl$Material_Options$cs(
+		function () {
+			var _p4 = device;
+			if (_p4.ctor === 'All') {
+				return '';
+			} else {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					'mdl-cell--hide-',
+					_MichaelCombs28$elm_mdl$Material_Grid$suffix(device));
+			}
+		}());
+};
+var _MichaelCombs28$elm_mdl$Material_Grid$order = F2(
+	function (device, n) {
+		return _MichaelCombs28$elm_mdl$Material_Options$cs(
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'mdl-cell--order-',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(
+						A3(_MichaelCombs28$elm_mdl$Material_Grid$clip, 1, 12, n)),
+					_MichaelCombs28$elm_mdl$Material_Grid$suffix(device))));
+	});
+var _MichaelCombs28$elm_mdl$Material_Grid$grid = F2(
+	function (styling, cells) {
 		return A2(
-			_elm_lang$html$Html$div,
-			{ctor: '[]'},
+			_MichaelCombs28$elm_mdl$Material_Options$div,
 			{
 				ctor: '::',
-				_0: A3(
-					_elm_lang$html$Html$node,
-					'style',
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$type_('text/css'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							A2(_MichaelCombs28$elm_mdl$Material_Scheme$scheme, primary, accent)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: content,
-					_1: {ctor: '[]'}
-				}
-			});
+				_0: _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-grid'),
+				_1: styling
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (_p5) {
+					var _p6 = _p5;
+					return _p6._0;
+				},
+				cells));
 	});
-var _MichaelCombs28$elm_mdl$Material_Scheme$top = function (content) {
-	return A3(_MichaelCombs28$elm_mdl$Material_Scheme$topWithScheme, _MichaelCombs28$elm_mdl$Material_Color$Grey, _MichaelCombs28$elm_mdl$Material_Color$Grey, content);
+var _MichaelCombs28$elm_mdl$Material_Grid$maxWidth = function (w) {
+	return A2(_MichaelCombs28$elm_mdl$Material_Options$css, 'max-width', w);
 };
+var _MichaelCombs28$elm_mdl$Material_Grid$noSpacing = _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-grid--no-spacing');
+var _MichaelCombs28$elm_mdl$Material_Grid$Phone = {ctor: 'Phone'};
+var _MichaelCombs28$elm_mdl$Material_Grid$Tablet = {ctor: 'Tablet'};
+var _MichaelCombs28$elm_mdl$Material_Grid$Desktop = {ctor: 'Desktop'};
+var _MichaelCombs28$elm_mdl$Material_Grid$All = {ctor: 'All'};
+var _MichaelCombs28$elm_mdl$Material_Grid$Cell = function (a) {
+	return {ctor: 'Cell', _0: a};
+};
+var _MichaelCombs28$elm_mdl$Material_Grid$cell = F2(
+	function (styling, elms) {
+		return _MichaelCombs28$elm_mdl$Material_Grid$Cell(
+			A2(
+				_MichaelCombs28$elm_mdl$Material_Options$div,
+				{
+					ctor: '::',
+					_0: _MichaelCombs28$elm_mdl$Material_Options$cs('mdl-cell'),
+					_1: styling
+				},
+				elms));
+	});
+var _MichaelCombs28$elm_mdl$Material_Grid$Bottom = {ctor: 'Bottom'};
+var _MichaelCombs28$elm_mdl$Material_Grid$Middle = {ctor: 'Middle'};
+var _MichaelCombs28$elm_mdl$Material_Grid$Top = {ctor: 'Top'};
 
 var _ccapndave$elm_update_extra$Update_Extra$identity = function (model) {
 	return A2(
@@ -19669,6 +19763,7 @@ var _rgrempel$elm_route_url$RouteUrl$programWithFlags = function (_p23) {
 		_rgrempel$elm_route_url$RouteUrl$navigationAppWithFlags(_p23));
 };
 
+var _fxmy$fxmygithubio$FxmyHeader$pub_key = '\n-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: GnuPG v2\n\nmQINBFh4xEQBEAC+MPnA55kJgLVfUu+Z28xFFmr6ypjljDBW3G96Mb2/khLPMxTG\nBU3Dg0icUFE20P+AfQCSPaPBLzjE6b5gCTeUf7yCcPlw4dzPf7lp2GdfAP/PfwJP\nG/zFPCdG0ij+bOrD4oN6zIgii8fecap8dFQDFYNeT6N7UzWkl7uPwS2ltzsdx8mV\ntdIlPLZOslN1VPBbe3hZ24Ua1X54TSn3lyNBAbH5Oo11YcXP9nMw79CZM+ZnDua4\n9UmLqO1DHa/+RDG2+Z34iseYq9Meo1PRpx/WA63Ov6Gzu8aO0Cv8hnY2ueVyD4q0\ni/+uqFUm8O1Q+QYGg1bTHZZZnAIPWxGdPkN/SwXGYOy/crh05rINyeVZDp5+ZgkO\ndWtrO/RZ+gU09TbNSPPGp2Cl/JmuNvRxXaJSbEn6bvxtdfCUqG1s1LuE3xoJIOrY\nJTxoqhoyiPCt6sNXHKFn035ZeKHE/mIQSovU6S+GawMDrV9uLddIP6cjakb6XpxO\n9INEnbq4ukji2FBzC5js/RY5B5VWRKi/O+fEQ0YSSNjbFA9K+w1EDRRqWUW5njDZ\naflc9LY683GYPEUnn0xIL8TwmjXtkbuyJm6TAiSQX3nY6odJkA6aT0fiiVc5lH4S\nuWhJHNpP1LOA2IajZDQQ5Ep7gwy3f/dXBaOrIcbcQ5yCwmGqhf7KMq6jlQARAQAB\ntDZmeG15d2MgKE5vIEdvZHMgb3IgS2luZ3MsIG9ubHkgTWFuKSA8ZnhteXdjQGdt\nYWlsLmNvbT6JAjcEEwEIACEFAlh4xEQCGwMFCwkIBwIGFQgJCgsCBBYCAwECHgEC\nF4AACgkQqbEqYPRCBfbIuw/+NrX9YXl8/PhfCY/wzuWSUFF0C0fabuAp5HhNYO9B\nr5pt+ZlwGFtGLiP3uBwCnTOfhlN8zKNCDQERWzOdkCCAltTkol5IISAgnL0nmO93\nUPggH1oPnf/onCQlqk6A/OuFBCm0s/A3GODHFrGhk8KfhPi9AJxjn34z+q/ur35w\npY26p7SZ2Eck2y5YlTWpTejskSAqeSe3kRnsn+nFjSRrrx/ZA1n8PXeTL0cyxSV3\n8xS1Z8XkE6246AVptfAvaEaIUeaVCIJ5ERpL6y8MjNBa+1lfNNgR7wdaqobe2r0W\nTCB5zO84Dj5d8AvcIA7hK4ABiVhUdxJhlV53hkuit5MrzQf7uBFKBiGfC3qOf7FY\n57i5STSRpcpodQGglQfCOxEzdf2Dd35mpQU/2RRmLPiE2QjXO8eDGS3JAE3X6Mco\npb+YUrL3t+6NyRYQPuSKvQE/GPFNSOIrxEXGtw4d5syB//LsfBIHt8i7dQ21unEQ\njJqKULIiMNRjNf98fd8qSd7bLBEoqK3eNmxIKYbELvGU9a4rOqK73dBlopurWfb5\nMLbUuaud+XP3CX/+bQhm0ChTi20n4Nu9F6oPVCSW4u29un1gTl03k+f8msWLsWjQ\n5eN5s39QXCa+aU/RKq6fQqKHG+awPfEWXlyVu+sw7OwbJcN+0HuL08dpn1RFgHgD\nxS65Ag0EWHjERAEQALHcbmH5/mkPxAFNdNBZU55vW7NUCnKmM5a68L5MEH6hvXus\ncQYCLGeaaRB/TuEiZi4c6xRpHlnekVASuW3JJlckUzDJLLXSXVrDYUroyZlsWqf4\nOsgwK7Kb89QNoxPwnznsFnCalODvlqBiRcz2UxjNp1z+xiSjSFHDqRAG9byULmmQ\n7PSoxCEVRig9Z5VW9vfDcWLrI92ahshdOPgOAqmzvO7P8CSg7m/LhI/+SmHPTxOu\njiHP+OX88XZIA6bm02dsrhMBWwb4cyhTnnhH4pj6j+nZ9JSWN+NVEknJ7z0a3aPV\nZf1Mh9snl4B3FTohXtiiUJuoLsbByJSu73/5jdCRdC2n5jTmPfALk4ZxH+Ko1pmD\n/+qOYjbCw7ZxYi7YikLuQI4D+y1ae3oaR9AjB8nQPJeKvKfBY2gontCc8C0buvdA\nw7oadPcO6PmwNIzUE3yCp4uM6ZFPXYjfjpr5ddv0Otuuc2BeBNwFdhONi3hcIf0P\nC7UrDOuosE0AYGNtfIjTLVteABgTpJZYY+xfbRPX8wUjhB352EPhL5Ujo9flc128\n8MZf7eLm604Jk1Q0+jR8xmJfc3oABEiTGcM6eKuW/QozXWQeCUk8zHTeKKVA8Gsi\nnClt1OkeQ6t3gBoTWzowEunVgBZjTb98z4BuwgsUXckzuUAQxMHPsX3jWF0PABEB\nAAGJAh8EGAEIAAkFAlh4xEQCGwwACgkQqbEqYPRCBfbrdxAArwN9dhLhj48TcCwy\nEArm+2Gx+6JqFSQ0HcoVrQP+Gu1RPCECqN68oPnTQ+l7A9IHJMitdufzEnFnjp4c\nyftEUTIW8urTgVpDgridfba2+K8gKFEXbQxsaRJhkJ+90nOsc+3i2FThLPqmI9cK\npM6VBUNRACF7LjuW1LG16ZgSzdHvnpKE4ouqEISM+T9A8vqrL9b/n/J57lqAP7ME\nMJXTHsxh6G1hs3VozHqn5T9X7boTergODjEaQWczUVwnpHDd4TKIHWSmIvLQTyjD\nQP/nuD7rnje5b37liUDkJapjGLULQGxYf7l1DEPVquEfIWlKK5UtH73Z6T2rdM1Z\nzfBQ1K7RFrL5etwk9VLxmpq5oeFCf36CsDIbjr4cStHYsP1mgnY14Pq8S6tqpAAc\n0YP3tppYHvZpluWrKTOD/PkGKbgq8/HzuKNfFoyyE+k9O4jtJBqucRl4T+mSAyS/\nMGuR614sW0ec2+0Oyg/nNSSLmG3PK9hfXh4FJBn2xQxQGUnc+wtkzt1LSyPXOTxL\n1x57V8xEqsha5jnz/ZKWbPVfPW1vMwkxBabOP54pNjLe9/oew082rjsxWT+IagnN\ndMzb2mBcLAI5tUXFbHP7vaVQ9+cFdNCCsv2+9qY8WKgsRLvA5BGSLq7L05bxdb6r\ng5c0hFX4ocqTYSkc2uG/Ls+ncfw=\n=0Ak9\n-----END PGP PUBLIC KEY BLOCK-----\n  ';
 var _fxmy$fxmygithubio$FxmyHeader$delta2url = F2(
 	function (modelOld, modelNew) {
 		if (!_elm_lang$core$Native_Utils.eq(modelOld.tab_selected, modelNew.tab_selected)) {
@@ -19702,21 +19797,75 @@ var _fxmy$fxmygithubio$FxmyHeader$delta2url = F2(
 	});
 var _fxmy$fxmygithubio$FxmyHeader$view_about = function (model) {
 	return A2(
-		_elm_lang$html$Html$h2,
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
+			_0: A2(
+				_elm_lang$html$Html$h2,
 				{
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 24px'},
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 24px'},
+							_1: {ctor: '[]'}
+						}),
 					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('fxmywc@gmail.com (`ε´ )'),
+						_1: {ctor: '[]'}
+					}
 				}),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text('fxmywc@gmail.com (`ε´ )'),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_MichaelCombs28$elm_mdl$Material_Grid$grid,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_MichaelCombs28$elm_mdl$Material_Grid$cell,
+								{
+									ctor: '::',
+									_0: A2(_MichaelCombs28$elm_mdl$Material_Grid$size, _MichaelCombs28$elm_mdl$Material_Grid$All, 4),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$pre,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('gpg'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(_fxmy$fxmygithubio$FxmyHeader$pub_key),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
 		});
 };
 var _fxmy$fxmygithubio$FxmyHeader$initModel = {header_content: 'No Gods or Kings, only Man.', mdl: _MichaelCombs28$elm_mdl$Material$model, tab_selected: 0, body: _fxmy$fxmygithubio$FxmyBody$initModel};
@@ -19859,126 +20008,122 @@ var _fxmy$fxmygithubio$FxmyHeader$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
 var _fxmy$fxmygithubio$FxmyHeader$view = function (model) {
-	return A3(
-		_MichaelCombs28$elm_mdl$Material_Scheme$topWithScheme,
-		_MichaelCombs28$elm_mdl$Material_Color$Teal,
-		_MichaelCombs28$elm_mdl$Material_Color$Pink,
-		A4(
-			_MichaelCombs28$elm_mdl$Material_Layout$render,
-			_fxmy$fxmygithubio$FxmyHeader$Mdl,
-			model.mdl,
-			{
+	return A4(
+		_MichaelCombs28$elm_mdl$Material_Layout$render,
+		_fxmy$fxmygithubio$FxmyHeader$Mdl,
+		model.mdl,
+		{
+			ctor: '::',
+			_0: _MichaelCombs28$elm_mdl$Material_Layout$fixedHeader,
+			_1: {
 				ctor: '::',
-				_0: _MichaelCombs28$elm_mdl$Material_Layout$fixedHeader,
+				_0: _MichaelCombs28$elm_mdl$Material_Layout$waterfall(true),
 				_1: {
 					ctor: '::',
-					_0: _MichaelCombs28$elm_mdl$Material_Layout$waterfall(true),
+					_0: _MichaelCombs28$elm_mdl$Material_Layout$onSelectTab(_fxmy$fxmygithubio$FxmyHeader$SelectTab),
 					_1: {
 						ctor: '::',
-						_0: _MichaelCombs28$elm_mdl$Material_Layout$onSelectTab(_fxmy$fxmygithubio$FxmyHeader$SelectTab),
-						_1: {
-							ctor: '::',
-							_0: _MichaelCombs28$elm_mdl$Material_Layout$selectedTab(model.tab_selected),
-							_1: {ctor: '[]'}
-						}
+						_0: _MichaelCombs28$elm_mdl$Material_Layout$selectedTab(model.tab_selected),
+						_1: {ctor: '[]'}
 					}
 				}
-			},
-			{
-				header: {
-					ctor: '::',
-					_0: A2(
-						_MichaelCombs28$elm_mdl$Material_Layout$row,
-						{
-							ctor: '::',
-							_0: A2(_MichaelCombs28$elm_mdl$Material_Options$css, 'height', '152px'),
-							_1: {
-								ctor: '::',
-								_0: A2(_MichaelCombs28$elm_mdl$Material_Options$css, 'transition', 'height 333ms ease-in-out 500ms'),
-								_1: {ctor: '[]'}
-							}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$h1,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'padding', _1: '1rem'},
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(model.header_content),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: _MichaelCombs28$elm_mdl$Material_Layout$spacer,
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_MichaelCombs28$elm_mdl$Material_Layout$navigation,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: A2(
-												_MichaelCombs28$elm_mdl$Material_Layout$link,
-												{
-													ctor: '::',
-													_0: _MichaelCombs28$elm_mdl$Material_Layout$href('https://fxmy.github.io/rss.xml'),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h5,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('RSS'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}
-						}),
-					_1: {ctor: '[]'}
-				},
-				drawer: {ctor: '[]'},
-				tabs: {
-					ctor: '_Tuple2',
-					_0: {
+			}
+		},
+		{
+			header: {
+				ctor: '::',
+				_0: A2(
+					_MichaelCombs28$elm_mdl$Material_Layout$row,
+					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('Blog'),
+						_0: A2(_MichaelCombs28$elm_mdl$Material_Options$css, 'height', '152px'),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('About'),
+							_0: A2(_MichaelCombs28$elm_mdl$Material_Options$css, 'transition', 'height 333ms ease-in-out 500ms'),
 							_1: {ctor: '[]'}
 						}
 					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h1,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'padding', _1: '1rem'},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(model.header_content),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _MichaelCombs28$elm_mdl$Material_Layout$spacer,
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_MichaelCombs28$elm_mdl$Material_Layout$navigation,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_MichaelCombs28$elm_mdl$Material_Layout$link,
+											{
+												ctor: '::',
+												_0: _MichaelCombs28$elm_mdl$Material_Layout$href('https://fxmy.github.io/rss.xml'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$h5,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('RSS'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			drawer: {ctor: '[]'},
+			tabs: {
+				ctor: '_Tuple2',
+				_0: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Blog'),
 					_1: {
 						ctor: '::',
-						_0: _MichaelCombs28$elm_mdl$Material_Color$background(
-							A2(_MichaelCombs28$elm_mdl$Material_Color$color, _MichaelCombs28$elm_mdl$Material_Color$Teal, _MichaelCombs28$elm_mdl$Material_Color$S400)),
+						_0: _elm_lang$html$Html$text('About'),
 						_1: {ctor: '[]'}
 					}
 				},
-				main: {
+				_1: {
 					ctor: '::',
-					_0: _fxmy$fxmygithubio$FxmyHeader$view_main(model),
+					_0: _MichaelCombs28$elm_mdl$Material_Color$background(
+						A2(_MichaelCombs28$elm_mdl$Material_Color$color, _MichaelCombs28$elm_mdl$Material_Color$Teal, _MichaelCombs28$elm_mdl$Material_Color$S400)),
 					_1: {ctor: '[]'}
 				}
-			}));
+			},
+			main: {
+				ctor: '::',
+				_0: _fxmy$fxmygithubio$FxmyHeader$view_main(model),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _fxmy$fxmygithubio$FxmyHeader$main = _rgrempel$elm_route_url$RouteUrl$program(
 	{
