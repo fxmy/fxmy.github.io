@@ -139,4 +139,101 @@ receive % 初始化timer，设定循环的loop header和信箱的msg pointer
   end
 after T -> A end
 ```
-43:07
+在core erlang这层处理这类问题太复杂了，所以交给了后面的流水线来处理
+
+--------------------
+##Core optimization##
+  - 常量传递/折叠：`X=17,Y=X+4,f(Y) -> f(21)`
+  - 基础类型的类型追踪
+  - +inline_list_funcs：把`lists:map(),fold()`等函数inline到module里
+
+--------------------
+##Kernel erlang##
+从这里开始进入beam层面了
+  - `erlc +to_kernel foo.erl`
+  - 没有嵌套的表达式
+  - only unique variables, variable usage information annotations
+  - 尾调用标记有`enter`，其他的都是非尾调用
+  - pattern matching编译成decision tree
+  - ["lambda lifting"](https://en.wikipedia.org/wiki/Lambda_lifting): funs (and letrecs) converted to top level functions
+
+###Destructive setelement###
+在编程kernel erlang之前会有这么一个阶段，功能是提高更新一连串tuple时候的效率
+  - sys_core_dsetel: adds destructive updates
+  - 更新多个record字段时，会产生一系列的setelement
+  - 在第一次setelement之后：
+    - 后续setelement无需检查type与size
+    - 可以用destructive操作来避免每次都要拷贝tuple
+  - 前提要满足多次更新的是同一个tuple
+  - 前提要满足多次更新期间不会有GC
+    - 这意味着不允许有从old generation到newer generation的指针存在
+
+--------------------
+##The BEAM abstract machine##
+  - 基于寄存器的VM（不同于基于栈的JAVA）
+  - 有X/Y寄存器，对应于CPU上的寄存器（size of one word）/内存中的栈帧
+  - 尾调用优化支持（call vs call_last操作）
+    - last_call会销毁当前栈帧然后jump走
+  - ERTS在加载beam code的时候会把它转换成特殊的内部操作（specialized internal operations），参见6K行的`beam_load.c`
+  - 用`erts_debug:df(Module)`来生成`module.dis`来查看一个模块在load到BEAM里之后的样子：
+    ```
+    00007FD7D86A2BE0: i_func_info_IaaI 0 t microsecond_time 0 
+    00007FD7D86A2C08: allocate_tt 0 0 
+    00007FD7D86A2C18: call_bif_e erlang:system_time/0 
+    00007FD7D86A2C28: i_int_div_jIssd j(0000000000000000) 1 x(0) 1000 x(0) 
+    00007FD7D86A2C58: deallocate_return_Q 0 
+
+    00007FD7D86A2C68: i_func_info_IaaI 0 t module_info 0 
+    00007FD7D86A2C90: move_cr t r(0) 
+    00007FD7D86A2CA0: allocate_tt 0 1 
+    00007FD7D86A2CB0: call_bif_e erlang:get_module_info/1 
+    00007FD7D86A2CC0: deallocate_return_Q 0 
+
+    00007FD7D86A2CD0: i_func_info_IaaI 0 t module_info 1 
+    00007FD7D86A2CF8: move_rx r(0) x(1) 
+    00007FD7D86A2D08: move_cr t r(0) 
+    00007FD7D86A2D18: allocate_tt 0 2 
+    00007FD7D86A2D28: call_bif_e erlang:get_module_info/2 
+    00007FD7D86A2D38: deallocate_return_Q 0
+    ```
+
+--------------------
+##Code generation##
+  - 分析变量生命周期
+  - insert labels as targets for flow control instructions
+  - 为变量分配X寄存器
+  - 用X1，X2..来作函数调用传参
+  - 在函数调用期间把X寄存器中的参数保存到栈帧（Y寄存器）中（压栈）
+  - 插入在堆上申请空间的指令
+    - 一个list cell需要2个word
+    - 异常处理时需要的tags（try/catch）
+
+--------------------
+##Beam level optimizations##
+  - Reordering
+  - bit syntax optimizations
+  - simple type based optimizations (mainly numerical)
+  - dead/unreachable code elimination
+  - [peephole optimization](https://en.wikipedia.org/wiki/Peephole_optimization)
+  - "the ref trick" of receives
+  - stack trimming
+  - `erlc +to_asm foo.erl`
+
+--------------------
+##Beam file generation##
+  - Validation (basic sanity checking, don't crash the emulator)
+  - 把asm翻译成byte序列
+    - 目前约有150个不同的opcode
+  - 产出包含有不同chunk的binary encoding
+    - bytecode, atom, constant literal, attribute
+    - exported function table (entry points)
+    - source line table (map bytecode to source line), compilation info, debug info
+
+--------------------
+#另参考#
+1. [演讲的示例](https://github.com/richcarl/erlang-compiler-demo)
+2. [A Peek Inside the Erlang Compiler](http://prog21.dadgum.com/127.html)
+3. [Hack your own Erlang VM](http://studzien.github.io/hack-vm/part1.html)
+
+--------------------
+#ﾟ ∀ﾟ)ノ#
