@@ -16,7 +16,7 @@ Ports在BEAM之外运行了一个独立的程序，通过stdin/stdout与BEAM进�
 > |  BEAM +-------+    |
 > |       |  Pid  |    |
 > |       |       |    |
-> |       +--^----+    |
+> |       +----^--+    |
 > |         |  |       |
 > |         |  |       |
 > |      +--v--+-----+ |
@@ -73,3 +73,38 @@ NIF(native implemented function)也是被加载到VM里的.so，是取代了普�
   - 测试NIF和Port Driver的运行时间
   - 把工作细分，及早yeild
   - 利用异步线程池与dirty nif/dirty scheduler
+
+---
+##当问题出现
+作为一个成熟的生态环境，Erlang和C一样有许多工具可用：
+- Erlang
+  - dbg
+  - crashdump_viewer
+  - recon
+  - redbug
+  - ...
+- C
+  - dbg
+  - valgrind
+  - afl-fuzz
+  - ...
+然而许多调试C的工具直接拿来调试BEAM并不适用：
+- beam.*有可能并不带调试符号
+- 由于Erlang有自己的内存管理，valgrind有时会给出错误的诊断
+- BIF和Port driver难以独立运行
+
+---
+好消息是我们可以编译出带有调试符号的BEAM，然后可以跑在各种调试工具里。
+在编译完毕BEAM的基础上：
+```bash
+export ERL_TOP=`pwd`
+cd $ERL_TOP/erts/emulator
+make debug valgrind gcov gprof lcnt icount FLAVOR=smp
+```
+然后这样启动
+```bash
+$ERL_TOP/bin/cerl -rgdb # -gdb其实启动emacs里的GDB GUI..
+$ERL_TOP/bin/cerl -valgrind
+```
+> cerl有许多选项，参见cerl文件
+15:52
